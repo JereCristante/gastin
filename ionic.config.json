@@ -1,0 +1,8 @@
+{
+  "name": "Gastin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "51fcd3a4"
+}
