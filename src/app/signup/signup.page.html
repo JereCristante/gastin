@@ -1,13 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>signup</ion-title>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">signup</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div>
+    <ion-card>
+      <ion-card-title id="title">Bienvenid@ a Gastin!</ion-card-title>
+    </ion-card>
+    <ion-input label="Email" type="email"label-placement="floating" fill="outline"></ion-input>
+    <ion-input label="Alias" label-placement="floating" fill="outline"></ion-input>
+    <ion-input label="Contraseña" type="password" label-placement="floating" fill="outline"></ion-input>
+    <ion-input label="Repeti la Contraseña" type="password"label-placement="floating" fill="outline"></ion-input>
+    <ion-card>
+      <ion-card-subtitle id="bottom">Ya tengo una cuenta, <a [routerLink]="'/login-form'" style="color:white">quiero ingresar!</a></ion-card-subtitle>
+      <ion-button expand="block" id="SignUpBtn">Registrarme</ion-button>
+    </ion-card>
+  </div>
+ 
 </ion-content>

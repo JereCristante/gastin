@@ -1,0 +1,20 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>loginForm</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+  <ion-content [fullscreen]="true">
+    <div>
+      <ion-card id="title">
+        <ion-card-title style="color:white">Bienvenid@ a Gastin!</ion-card-title>
+      </ion-card>
+      <ion-input label="Email" name="email" label-placement="floating" fill="outline" [(ngModel)]="email" required></ion-input>
+      <ion-input label="Contraseña" type="password" name="password" label-placement="floating" fill="outline" [(ngModel)]="password" required></ion-input>
+      <ion-card-subtitle id="forgotLink"><a [routerLink]="'/forgotpassword'" style="color:white">Me olvide la Contraseña!</a></ion-card-subtitle>
+      
+      <ion-card>
+        <ion-card-subtitle id="signUpLink">No tengo una cuenta, <a [routerLink]="'/signup'" style="color:white">quiero registrarme!</a></ion-card-subtitle>
+        <ion-button expand="block" id="LoginBtn">Ingresar</ion-button>
+      </ion-card>
+    </div>
+  </ion-content>  

@@ -1,0 +1,38 @@
+
+ion-card{
+    background-color: #30383A !important;
+    border: none;
+    box-shadow: none;
+
+}
+#LoginBtn{
+    --background: #30383A !important;
+    color: white !important;
+    --border-color: #4CA49C;
+    text-transform: none;
+
+}
+#SignUpBtn{
+    text-transform: none;
+    --background: #4CA49C;
+    --box-shadow: 0 0px 0px 0 rgb(0, 0, 0, 0.25);
+}
+ion-button{
+    //--ion-background-color: blue !important;
+    color: white !important;
+    box-shadow: none;
+}
+ion-content{
+    --ion-background-color: #30383A !important;
+    
+}
+#Btns{
+    //margin-top: 100% !important;
+}
+#container{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+}
