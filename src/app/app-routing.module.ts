@@ -6,26 +6,26 @@ const routes: Routes = [
     path: 'gastin',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
-  },
-  {
-    path: 'account',
-    loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
-  },
-  {
-    path: 'reports',
-    loadChildren: () => import('./reports/reports.module').then( m => m.ReportsPageModule)
-  },
-  {
-    path: 'wallets',
-    loadChildren: () => import('./wallets/wallets.module').then( m => m.WalletsPageModule)
-  },
+  // {
+  //   path: 'home',
+  //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  // },
+  // {
+  //   path: 'settings',
+  //   loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  // },
+  // {
+  //   path: 'account',
+  //   loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
+  // },
+  // {
+  //   path: 'reports',
+  //   loadChildren: () => import('./reports/reports.module').then( m => m.ReportsPageModule)
+  // },
+  // {
+  //   path: 'wallets',
+  //   loadChildren: () => import('./wallets/wallets.module').then( m => m.WalletsPageModule)
+  // },
   {
     path: '',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
@@ -41,6 +41,11 @@ const routes: Routes = [
   {
     path: 'login-form',
     loadChildren: () => import('./login-form/login-form.module').then( m => m.LoginFormPageModule)
+  },
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
   }
 
 ];

@@ -1,7 +1,6 @@
 export interface Wallet{
     id: number;
-    description: String;
+    description: string;
     balance: number;
-    user: number;
     active: boolean;
 }

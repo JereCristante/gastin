@@ -4,6 +4,9 @@ import { NewUser } from '../interfaces/newUser';
 import { LoginUser } from '../interfaces/LoginUser';
 import { Observable } from 'rxjs';
 import { JwtDto } from '../interfaces/JwtDto';
+import { Category } from '../interfaces/CategoryInterface';
+import { User } from '../interfaces/UserInterface';
+import { Wallet } from '../interfaces/WalletInterface';
 
 @Injectable({
   providedIn: 'root'

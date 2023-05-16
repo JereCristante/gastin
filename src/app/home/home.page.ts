@@ -6,6 +6,13 @@ import { Movement } from '../interfaces/MovementInterface';
 import { DateMovs } from '../interfaces/MovementListInterface';
 import { Category } from '../interfaces/CategoryInterface';
 import { Wallet } from '../interfaces/WalletInterface';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../Services/user.service';
+import { MovementService } from '../Services/movement.service';
+import { User } from '../interfaces/UserInterface';
+import { AuthService } from '../Services/auth.service';
+import { NewMovement } from '../interfaces/NewMovement';
+import { ModalController } from '@ionic/angular';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -17,11 +24,43 @@ export class HomePage implements OnInit {
   dates: DateMovs[]=[];
   categories: Category[]=[];
   wallets: Wallet[]=[];
-  constructor(private http:HttpClient){
+  destwallets: Wallet[]=[];
+  user?:User;
+  today = new Date();
+  userTimezoneOffset = this.today.getTimezoneOffset(); // Obtén el desplazamiento de la zona horaria del usuario en minutos
+  utcDate = new Date(this.today.getTime() - (this.userTimezoneOffset * 60 * 1000));
+  validatorMovement!: FormGroup;
+  MovementType: number = 1;
+  constructor(private http:HttpClient,public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
+    
+    this.validatorMovement = this.fb.group({
+      description: new FormControl('', Validators.compose([Validators.required])),
+      amount: new FormControl('', Validators.compose([Validators.required])),
+      date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
+      category: new FormControl('', Validators.compose([Validators.required])),
+      wallet: new FormControl('', Validators.compose([Validators.required])),
+      destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
+    });
+    
   }
   ngOnInit() {
-    this.generateItems();
-    //this.getMovements().subscribe(res=>{this.movements = res;});
+    this.uS.getUserInfoByEmail(sessionStorage.getItem('AuthEmail')!).subscribe(
+      data=> {
+        this.user=data;
+        this.refreshCategories();
+        this.refreshWallets();
+      },
+      error => {
+        // Manejar el error aquí
+          //if(error.status!=200){
+            alert(error.error);
+            console.log(error)
+          //}
+      }
+    );
+
+    
+    
   }
 
   private generateItems() {
@@ -30,7 +69,10 @@ export class HomePage implements OnInit {
       this.items.push(`Gasto ${count + i}`);
     }
   }
-
+  closeModal() {
+    this.modalController.dismiss();
+    this.refreshWallets();
+  }
   onIonInfinite(ev: any) {
     this.generateItems();
     setTimeout(() => {
@@ -43,24 +85,94 @@ export class HomePage implements OnInit {
       event.target.complete();
     }, 2000);
   };
-  
+  refreshCategories(){
+    this.uS.getCategoriesByUser(this.user!.id,this.MovementType).subscribe(
+      data=> {
+        this.categories=data;
+        this.validatorMovement.patchValue({category:this.categories[0].id});
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
+  refreshWallets(){
+    this.uS.getAccountsByUser(this.user!.id).subscribe(
+      data=> {
+        this.wallets=data;
+        this.destwallets=data;
+        this.validatorMovement.patchValue({wallet:this.wallets[0].id});
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
+  confirmMovement(value:any){
+    console.log(value);
+    if(this.MovementType===1 || this.MovementType===3){
+      const Selectedwallet = this.wallets.find((wallet) => wallet.id === value.wallet);
+      if(value.amount > Selectedwallet!.balance){
+        alert('El monto de la operacion es mayor al saldo de la cuenta seleccionada');
+        return;
+      }
+    }
+    let movimiento = new NewMovement(value.description,value.amount,value.date,true);
+    //if(value.destinationWallet==''){
+      //value.destinationWallet=0;
+    //}
+    this.mS.newMovement(this.user!.id,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
+      data=> {
+        this.validatorMovement.reset();
+        this.closeModal();
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
+  segmentChanged(event : any) {
+    if(event.detail.value == "Gasto"){
+      this.MovementType=1;
+      this.refreshCategories();
+      this.validatorMovement.patchValue({destinationWallet:0});
+    }
+    if(event.detail.value == "Ingreso"){
+      this.MovementType=2;
+      this.refreshCategories();
+      this.validatorMovement.patchValue({destinationWallet:0});
+    }
+    if(event.detail.value == "Movimiento"){
+      this.MovementType=3;
+      this.validatorMovement.patchValue({category:0});
+    }
+  }
+  onSelectionChange(event: any) {
+    const selectedWallet = event.detail.value;
+    this.destwallets = this.wallets.filter((wallet) => wallet.id !== selectedWallet);
 
-
+  }
   cancel() {
-  // this.modal.dismiss(null, 'cancel');
+    this.modalController.dismiss();
   }
 
   confirm() {
-   //this.modal.dismiss(this.name, 'confirm');
+    this.modalController.dismiss();
   }
 
-  onWillDismiss(event: Event) {
-    //const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    //if (ev.detail.role === 'confirm') {
-    //  this.message = `Hello, ${ev.detail.data}!`;
-    //}
-  }
-  //getMovements(){
-  //  return this.http.get("").pipe(map((res:any)=> {return res.data;}))
-  //}
 }

@@ -28,7 +28,7 @@ export class LoginFormPage implements OnInit {
       this.isLoginFail=false;
     }
     if(this.isLogged){
-      this.router.navigate(['/home']);
+      //this.router.navigate(['/home']);
     }
     this.validationFormUser = this.fb.group({
       email: new FormControl('', Validators.compose([Validators.required, Validators.email])),
@@ -46,7 +46,7 @@ export class LoginFormPage implements OnInit {
         this.tokenService.setToken(data.token);
         this.tokenService.setEmail(data.email);
         console.log( data + " logueado");
-        this.router.navigate(['/home']);
+        this.router.navigate(['/gastin/home']);
       },
       error => {
         // Manejar el error aquí

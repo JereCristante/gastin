@@ -52,43 +52,51 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-  <ion-modal #modal1 trigger="open-modal-new" (willDismiss)="onWillDismiss($event)">
+  <ion-modal #modal1 trigger="open-modal-new">
     <ng-template>
-      <ion-content>
+      <ion-content id="container">
         
-        <ion-header>
+        <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
           <ion-title>Nuevo</ion-title>
           <ion-toolbar>
-            <ion-segment value="Gasto">
+            <ion-segment (ionChange)="segmentChanged($event)" value="Gasto" style="text-align: center; background-color: #30383A; color: #EFEBDD !important; font-size: 6px !important;">
               <ion-segment-button value="Gasto">
-                <ion-label>Gasto</ion-label>
+                <ion-label>Gasto -</ion-label>
               </ion-segment-button>
               <ion-segment-button value="Ingreso">
-                <ion-label>Ingreso</ion-label>
+                <ion-label>Ingreso +</ion-label>
               </ion-segment-button>
-              <ion-segment-button value="movimiento">
-                <ion-label>Movimiento</ion-label>
+              <ion-segment-button value="Movimiento">
+                <ion-label>Movimiento =</ion-label>
               </ion-segment-button>
             </ion-segment>
           </ion-toolbar>
         </ion-header>
-        <ion-input placeholder="Descripción"></ion-input>
-        <ion-input label="$" type="number" placeholder="0.00"></ion-input>
-        <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime>
-        <ion-select label="Categoria" label-placement="floating" placeholder="Varios">
+        <form (ngSubmit)="confirmMovement(validatorMovement.value)" [formGroup]="validatorMovement">
+        <ion-input placeholder="Descripción"formControlName="description" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
+        <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
+        <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
+        <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
           <ion-select-option *ngFor="let category of categories" [value]="category.id">{{category.description}}</ion-select-option>
         </ion-select>
-        <ion-select label="Cuenta" label-placement="floating" placeholder="Efectivo">
+        <ion-select label="Cuenta Origen" label-placement="floating" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
           <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
         </ion-select>
-        <ion-toolbar>
+        <ion-select *ngIf="MovementType===3" label="Cuenta Destino" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
+          <ion-select-option *ngFor="let wallet of destwallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
+        </ion-select>
+        <ion-toolbar class="toolbar-bottom">
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancelar</ion-button>
           </ion-buttons>
+          <ion-buttons slot="">
+            <ion-button (click)="confirm()"><ion-icon name="time-outline"> </ion-icon> Programar</ion-button>
+          </ion-buttons>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Agregar</ion-button>
+            <ion-button type="submit" [disabled]="!validatorMovement.valid" [strong]="true" style="color:#4CA49C;">Agregar</ion-button>
           </ion-buttons>
         </ion-toolbar>
+      </form>
       </ion-content>
     </ng-template>
   </ion-modal>

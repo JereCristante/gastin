@@ -1,9 +1,9 @@
 
 export interface User{
-    id: Number;
-    alias: String;
-    email: String;
-    password: String;
-    idUpperUser: Number;
+    id: number;
+    alias: string;
+    email: string;
+    password: string;
+    idUpperUser: number;
     active: boolean;
 }
