@@ -8,17 +8,25 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-   
     <ion-item *ngFor="let date of dates; let index">
       <div class="ion-activatable ripple-parent rounded-rectangle" id="open-modal-edit" expand="block">
-        <ion-row>
-          <ion-col><ion-label slot="start">{{date.date}}</ion-label><ion-label slot="end">{{date.total|currency}}</ion-label></ion-col>
+        <ion-grid>
+        <ion-row id="date" class="ion-justify-content-between">
+           <ion-col style="min-width: 55vw; font-size: small;" size="4">{{date.date | date:'fullDate'}}</ion-col>
+           <ion-col size="4" style="text-align: end;">{{date.total|currency}}</ion-col>  
         </ion-row>
-        <ion-row *ngFor="let movement of date.Movements">
-          <ion-row><ion-col slot="start">Descripción {{movement.description}}</ion-col><ion-col slot="end">Monto {{movement.amount| currency}}</ion-col></ion-row>
-          <ion-row><ion-col slot="start">Categoria {{movement.category.description}}</ion-col><ion-col slot="end">Cuenta{{movement.account}} | Saldo{{movement.account.balance| currency}}</ion-col></ion-row>
+      </ion-grid> 
+        <ion-row *ngFor="let movement of date.movements">
+        <ion-grid>
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="6" size-md="4" size-lg="2">{{movement.description}}</ion-col>
+            <ion-col size="6" size-md="4" size-lg="2" style="text-align: end;">{{movement.amount| currency}}</ion-col>
+            <ion-col size="6" size-md="4" size-lg="2">{{movement.category}}</ion-col>
+            <ion-col size="6" size-md="4" size-lg="2" style="text-align: end;">{{movement.account}}</ion-col>
+          </ion-row>
+        </ion-grid> 
         </ion-row>
-        <ion-ripple-effect></ion-ripple-effect>
+         <ion-ripple-effect></ion-ripple-effect> 
       </div>
     </ion-item>
   </ion-list>
@@ -55,7 +63,7 @@
   <ion-modal #modal1 trigger="open-modal-new">
     <ng-template>
       <ion-content id="container">
-        
+
         <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
           <ion-title>Nuevo</ion-title>
           <ion-toolbar>

@@ -4,6 +4,7 @@ import { Category } from '../interfaces/CategoryInterface';
 import { Observable } from 'rxjs';
 import { NewMovement } from '../interfaces/NewMovement';
 import { Movement } from '../interfaces/MovementInterface';
+import { DateMovs } from '../interfaces/MovementListInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +15,8 @@ export class MovementService {
   public newMovement(user:number,wallet:number,category:number,movementType:number,newMovement:NewMovement,destinationWallet?:number):Observable<Movement>{
     return this.http.post<Movement>(this.url+user+'/'+wallet+'/'+destinationWallet+'/'+category+'/'+movementType+'/movements',newMovement);
   }
-  
+  getMovementsByUser(user:number): Observable<DateMovs[]>{
+    let direccion = this.url +user+"/movements";
+    return this.http.get<DateMovs[]>(direccion);
+  }
 }

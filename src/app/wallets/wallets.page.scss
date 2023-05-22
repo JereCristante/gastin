@@ -1,3 +1,24 @@
 ion-toolbar{
     background-color: var(--ion-color-maing);
 }
+ion-content{
+    --ion-background-color: #BABEBE !important;
+    --ion-color: #30383A;
+}
+#header{
+    background-color: #30383A !important;
+    font-size: 5vh !important; 
+    --ion-color: #EFEBDD !important;
+}
+#footer{
+    background-color: #30383A !important;
+    text-align: end;
+    padding-right: 1vh !important;
+    --ion-color: #EFEBDD !important;
+}
+.positive{
+    --ion-color: #3FC53C !important;
+}
+.negative{
+    --ion-color: #D11F1F !important;
+}

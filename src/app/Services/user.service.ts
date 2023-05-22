@@ -4,6 +4,7 @@ import { User } from '../interfaces/UserInterface';
 import {Observable} from 'rxjs';
 import { Category } from '../interfaces/CategoryInterface';
 import { Wallet } from '../interfaces/WalletInterface';
+import { WalletReport } from '../interfaces/WalletReportInterface';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,5 +27,9 @@ export class UserService {
   getAccountsByUser(user:number): Observable<Wallet[]>{
     let direccion = this.url +"accounts/"+user+"/accounts";
     return this.http.get<Wallet[]>(direccion);
+  }
+  getAccountsByUserWithMovements(user:number): Observable<WalletReport[]>{
+    let direccion = this.url +"accounts/"+user+"/WithMovements";
+    return this.http.get<WalletReport[]>(direccion);
   }
 }

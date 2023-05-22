@@ -2,13 +2,9 @@ import { Category } from "./CategoryInterface";
 import { Wallet } from "./WalletInterface";
 
 export interface Movement{
-    id?: number;
-    description: String;
+    description: string;
     amount: number;
-    date: Date;
-    account: Wallet;
-    destinationAccount?: Wallet;
-    category: Category;
-    movementType: number;
-    active?: boolean;
+    category?: String;
+    account?:String;
+    movementType?: number;
 };

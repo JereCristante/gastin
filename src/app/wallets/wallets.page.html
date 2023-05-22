@@ -3,35 +3,45 @@
     <ion-title>Gastin</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Efectivo</ion-card-title>
-    <ion-card-subtitle>$4.000</ion-card-subtitle>
+<ion-content>
+  <ion-card style="border-radius: 10px;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-grid style="margin:0; font-size: 4vh; color: #EFEBDD;">
+        <ion-row class="ion-justify-content-between">
+          <ion-col size="6">
+            Total:
+          </ion-col>
+          <ion-col size="6" style="text-align: end;">
+            {{Capital | currency}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-header>
+  </ion-card>
+<ion-card *ngFor="let wallet of wallets" style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+  <ion-card-header id="header" style="padding:0; margin:0;">
+    <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">{{wallet.account.description | titlecase}}</ion-card-title>
   </ion-card-header>
-
-  <ion-card-content>
-    Super        -$1.000
+  
+  <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+    <ion-list style="padding: 0;">
+      <ion-item *ngFor="let movement of wallet.movements" style=" --background:#D9D9D9 !important; font-size: 2.5vh; font-weight: bold; --inner-border-width:0;">
+        <ion-grid>
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="6" style="color: black">
+              {{movement.description | titlecase}}
+            </ion-col>
+            <ion-col size="5" style="text-align: end; font-size: 2.5vh; font-weight: bold;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">
+              {{movement.amount | currency}}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
   </ion-card-content>
-  <ion-card-content>
-    Taxi         -$500
-  </ion-card-content>
-  <ion-card-content>
-    Kiosko       -$200
-  </ion-card-content>
-</ion-card>
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Banco</ion-card-title>
-    <ion-card-subtitle>$18.000</ion-card-subtitle>
+  <ion-card-header id="footer" style="padding:5px; margin:0;">
+    <ion-card-title style="color: #EFEBDD !important; font-size: 4vh !important;">{{wallet.account.balance | currency}}</ion-card-title>
   </ion-card-header>
-
-  <ion-card-content>
-    Deposito        +$10.000
-  </ion-card-content>
-  <ion-card-content>
-    Netflix       -$200
-  </ion-card-content>
 </ion-card>
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
   <ion-fab-button color="success" id="open-modal-new">
@@ -49,3 +59,4 @@
     </ion-fab-button>
   </ion-fab-list> -->
 </ion-fab>
+</ion-content>

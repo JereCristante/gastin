@@ -31,7 +31,7 @@ export class HomePage implements OnInit {
   utcDate = new Date(this.today.getTime() - (this.userTimezoneOffset * 60 * 1000));
   validatorMovement!: FormGroup;
   MovementType: number = 1;
-  constructor(private http:HttpClient,public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
+  constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
     
     this.validatorMovement = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required])),
@@ -49,6 +49,7 @@ export class HomePage implements OnInit {
         this.user=data;
         this.refreshCategories();
         this.refreshWallets();
+        this.refreshMovements();
       },
       error => {
         // Manejar el error aquí
@@ -70,8 +71,11 @@ export class HomePage implements OnInit {
     }
   }
   closeModal() {
-    this.modalController.dismiss();
     this.refreshWallets();
+    this.refreshCategories();
+    this.validatorMovement.reset();
+    this.refreshMovements();
+    this.modalController.dismiss();
   }
   onIonInfinite(ev: any) {
     this.generateItems();
@@ -89,7 +93,10 @@ export class HomePage implements OnInit {
     this.uS.getCategoriesByUser(this.user!.id,this.MovementType).subscribe(
       data=> {
         this.categories=data;
-        this.validatorMovement.patchValue({category:this.categories[0].id});
+        if(this.categories[0].id){
+          this.validatorMovement.patchValue({category:this.categories[0].id});
+        }
+        
       },
       error => {
         // Manejar el error aquí
@@ -118,15 +125,39 @@ export class HomePage implements OnInit {
       }
     );
   }
+  refreshMovements(){
+    this.mS.getMovementsByUser(this.user!.id).subscribe(
+      data=> {
+        this.dates=data;
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
   confirmMovement(value:any){
     console.log(value);
+    if(value.amount <0.01){
+      alert('El monto debe ser minimo 1 centavo');
+        return;
+    }
     if(this.MovementType===1 || this.MovementType===3){
       const Selectedwallet = this.wallets.find((wallet) => wallet.id === value.wallet);
       if(value.amount > Selectedwallet!.balance){
         alert('El monto de la operacion es mayor al saldo de la cuenta seleccionada');
         return;
       }
+      if(value.wallet === value.destinationWallet){
+        alert('La cuenta de origen no puede ser la misma que la de destino');
+        return;
+      }
     }
+
     let movimiento = new NewMovement(value.description,value.amount,value.date,true);
     //if(value.destinationWallet==''){
       //value.destinationWallet=0;
@@ -160,6 +191,7 @@ export class HomePage implements OnInit {
     if(event.detail.value == "Movimiento"){
       this.MovementType=3;
       this.validatorMovement.patchValue({category:0});
+      //this.validatorMovement.patchValue({destinationWallet:''});
     }
   }
   onSelectionChange(event: any) {
@@ -168,7 +200,7 @@ export class HomePage implements OnInit {
 
   }
   cancel() {
-    this.modalController.dismiss();
+    this.closeModal();
   }
 
   confirm() {
