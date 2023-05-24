@@ -32,4 +32,8 @@ export class UserService {
     let direccion = this.url +"accounts/"+user+"/WithMovements";
     return this.http.get<WalletReport[]>(direccion);
   }
+  newCategory(user:number,type:number,category:Category):Observable<Category>{
+    let direccion = this.url +"categories/"+user+"/"+type+"/categories";
+    return this.http.post<Category>(direccion,category);
+  }
 }
