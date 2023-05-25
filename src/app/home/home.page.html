@@ -12,21 +12,31 @@
       <div class="ion-activatable ripple-parent rounded-rectangle" id="open-modal-edit" expand="block">
         <ion-grid>
         <ion-row id="date" class="ion-justify-content-between">
-           <ion-col style="min-width: 55vw; font-size: small;" size="4">{{date.date | date:'fullDate'}}</ion-col>
-           <ion-col size="4" style="text-align: end;">{{date.total|currency}}</ion-col>  
+           <ion-col style="min-width: 55vw; font-size: small; display: flex; align-items: center;" size="4">{{date.date | date:'fullDate'}}</ion-col>
+           <ion-col size="5" style="text-align: end;">{{date.total|currency}}</ion-col>  
         </ion-row>
       </ion-grid> 
         <ion-row *ngFor="let movement of date.movements">
         <ion-grid>
-          <ion-row class="ion-justify-content-between">
-            <ion-col size="6" size-md="4" size-lg="2">{{movement.description}}</ion-col>
-            <ion-col size="6" size-md="4" size-lg="2" style="text-align: end;">{{movement.amount| currency}}</ion-col>
-            <ion-col size="6" size-md="4" size-lg="2">{{movement.category}}</ion-col>
-            <ion-col size="6" size-md="4" size-lg="2" style="text-align: end;">{{movement.account}}</ion-col>
+          <ion-row >
+            <ion-col style="display: flex; justify-content: center; align-items: center;padding-bottom: 0 !important; padding-right: 0 !important;"><ion-avatar  class="circle" [ngStyle]="{'background':movement.movementType===2 ? '#3FC53C' : movement.movementType===1 ? '#D11F1F' : movement.movementType===3 ? 'gray' : ''}" style="background: #D11F1F;">
+              <ion-icon [name]="movement.categoryObj.icon" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
+            </ion-avatar></ion-col>
+            <ion-col size="10" size-md="10" size-lg="4" style="padding-bottom: 0 !important; padding-left: 0 !important;">
+              <ion-row class="ion-justify-content-between">
+                <ion-col size="7.5" size-md="4" size-lg="2" class="topRow"style=" color: #000; font-weight: bold;">{{movement.description | titlecase}}</ion-col>
+                <ion-col size="4.5" size-md="4" size-lg="2" class="topRow" style="text-align: end; font-weight: bold; padding-right:0 !important;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">{{movement.amount| currency:'USD':'symbol':'1.0-0'}}</ion-col>
+              </ion-row>
+              <ion-row class="ion-justify-content-between">
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow"style="font-weight: bold;">{{movement.categoryObj.description |titlecase}}</ion-col>
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow" style="text-align: end; color: #000; font-weight: bold; padding-right:0 !important;">{{movement.account|titlecase}}</ion-col>
+              </ion-row>
+            </ion-col>
           </ion-row>
+          <ion-ripple-effect></ion-ripple-effect> 
         </ion-grid> 
         </ion-row>
-         <ion-ripple-effect></ion-ripple-effect> 
+        
       </div>
     </ion-item>
   </ion-list>

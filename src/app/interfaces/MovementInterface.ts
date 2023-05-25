@@ -4,7 +4,8 @@ import { Wallet } from "./WalletInterface";
 export interface Movement{
     description: string;
     amount: number;
-    category?: String;
-    account?:String;
+    category?: number;
+    account?:string;
+    categoryObj:Category;
     movementType?: number;
 };
