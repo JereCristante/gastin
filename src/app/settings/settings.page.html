@@ -6,8 +6,8 @@
 
 <ion-content [fullscreen]="true">
   <ion-card style="border-radius: 10px;">
-    <ion-card-header id="header" style="padding: 5px; margin:0; text-align: center;">
-      <ion-title size="large" style="color: #30383A !important; font-size: 3vh !important;">Categorías</ion-title>
+    <ion-card-header style="padding: 5px; margin:0; text-align: center; background-color: #30383A !important;">
+      <ion-title size="large" style="color: #EFEBDD !important; font-size: 3vh !important;">Categorías</ion-title>
     </ion-card-header>
   </ion-card>
   <ion-card style="border-radius: 10px;">
@@ -17,7 +17,7 @@
   </ion-card>
   <ion-grid>
     <ion-row style="margin-left: 2.5vh;">
-    <ion-col *ngFor="let category of spentCategories" class="category" size="6" size-md="4" size-lg="2">
+    <ion-col *ngFor="let category of spentCategories" class="category" size="6" size-md="4" size-lg="2" (click)="EditCategory(category,1)">
       <ion-avatar  class="circle" style="background: #D11F1F;">
         <ion-icon [name]="category.icon" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
       </ion-avatar>
@@ -34,7 +34,7 @@
   </ion-card>
   <ion-grid>
     <ion-row style="margin-left: 2.5vh;">
-    <ion-col *ngFor="let category of incomeCategories" class="category" size="6" size-md="4" size-lg="2">
+    <ion-col *ngFor="let category of incomeCategories" class="category" size="6" size-md="4" size-lg="2" (click)="EditCategory(category,2)">
     <ion-avatar  class="circle" style="background: #3FC53C;">
     <ion-icon [name]="category.icon" color="white" style="font-size: 24px;"></ion-icon>
     </ion-avatar>
@@ -42,21 +42,46 @@
   </ion-col>
   </ion-row>
   </ion-grid>
-  <ion-modal #modal2 trigger="open-modal-edit">
+  <ion-modal #modalEditCategory>
   <ng-template>
     <ion-content>
-      <ion-title>Actualizar Categoría</ion-title>
+      <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+        <ion-title>Actualizar Categoría</ion-title>
+      </ion-header>
+      <form (ngSubmit)="confirmEditCategory(validatorCategoryUpdate.value)" [formGroup]="validatorCategoryUpdate">
+        <div style="display: flex; align-items: center; margin: 4vw;">
+          <ion-icon name="document-text-outline" style="font-size: 26px; color:#30383A"></ion-icon><ion-input  placeholder="Descripción"formControlName="description" style="height: 7vh !important; margin-left:1vw;font-size: 22px !important; color:#30383A;"></ion-input>
+        </div>
+          <div style="display:flex; justify-content: center;">
+            <ion-segment (ionChange)="typeChanged($event)" [value]="categoryTypeEdit" ng="iconColor" style="min-height: 5vh !important; height: 5vh !important; border-radius: 10px; max-width: 90vw; margin: 4vw; background:  #D9D9D9 !important;" >
+              <ion-segment-button value="1" class="spentOption">
+                <ion-label>Gasto</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="2" class="incomeOption">
+                <ion-label>Ingreso</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+          
+          <ion-grid>
+            <ion-row>
+            <ion-col *ngFor="let icon of icons" size="2" size-md="2" size-lg="2" style="display:flex; justify-content: center;">
+              <ion-button class="icon" [style.--background]="iconColor" (click)="changeIcon(icon)" ><ion-icon slot="icon-only" [name]="icon" style="font-size: 26px;"></ion-icon></ion-button>
+            </ion-col>
+            </ion-row>
+          </ion-grid>
+        <div style="display:flex; justify-content: center; margin: 3vh;">
+          <ion-button class="prototype" [style.--background]="iconColor" ><ion-icon slot="icon-only" [name]="selectedIcon" style="font-size: 35px;"></ion-icon></ion-button>
+        </div>
       <ion-toolbar class="toolbar-bottom">
         <ion-buttons slot="start">
           <ion-button (click)="cancel()">Cancelar</ion-button>
         </ion-buttons>
-        <ion-buttons slot="med">
-          <ion-button (click)="cancel()">Eliminar</ion-button>
-        </ion-buttons>
         <ion-buttons slot="end">
-          <ion-button (click)="confirm()" [strong]="true">Modificar</ion-button>
+          <ion-button type="submit" [disabled]="!validatorCategoryUpdate.valid" [strong]="true" style="color:#4CA49C;">Modificar</ion-button>
         </ion-buttons>
       </ion-toolbar>
+    </form> 
     </ion-content>
   </ng-template>
   </ion-modal>
@@ -106,7 +131,7 @@
   </ion-modal>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="success" id="open-modal-new-category">
-      <ion-icon name="add-outline" id="plus" ></ion-icon>
+      <ion-icon name="add-outline" id="plus" style="color: #EFEBDD !important; font-size: 10vw;" ></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

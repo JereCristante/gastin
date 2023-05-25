@@ -36,4 +36,9 @@ export class UserService {
     let direccion = this.url +"categories/"+user+"/"+type+"/categories";
     return this.http.post<Category>(direccion,category);
   }
+  updateCategory(category:Category,type:number):Observable<Category>{
+    let direccion = this.url +"categories/"+category.id+"/"+type+"/categories";
+    return this.http.put<Category>(direccion,category);
+  }
+
 }
