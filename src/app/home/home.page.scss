@@ -98,3 +98,7 @@ ion-grid{
 .bottomRow{
   padding-top: 0 !important;
 }
+::ng-deep .alert-wrapper.ion-overlay-wrapper.sc-ion-alert-md{
+  --background: #30383A !important;
+  border-radius: 10px !important;
+}

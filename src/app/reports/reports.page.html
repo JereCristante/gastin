@@ -5,9 +5,41 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">reports</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Dolar Hoy <ion-label style="color:darkgrey; font-size:x-small;">Actualizado: {{lastUpdate | date:'dd/MM/yyyy HH:mm'}}</ion-label></ion-card-title>
+    </ion-card-header>
+    
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important; font-size: 6vw; color: #30383A">
+      <ion-grid>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col>Compra</ion-col>
+          <ion-col>Venta</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Blue</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarBlue.value_buy | currency}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarBlue.value_sell | currency}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Oficial</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarOficial.value_buy | currency}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarOficial.value_sell | currency}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;"></ion-card-title>
+    </ion-card-header>
+    
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      
+    </ion-card-content>
+    <ion-card-header id="footer" style="padding:5px; margin:0;">
+      <ion-card-title style="color: #EFEBDD !important; font-size: 4vh !important;"></ion-card-title>
+    </ion-card-header>
+  </ion-card>
 </ion-content>

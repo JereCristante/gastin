@@ -7,3 +7,10 @@ ion-title{
     font-weight: bold;
     color: #EFEBDD !important;
   }
+ion-content{
+    --ion-background-color: #BABEBE !important;
+    --ion-color: #30383A;
+}
+ion-card-title{
+    background:#30383A;
+}

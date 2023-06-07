@@ -9,7 +9,7 @@
   </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let date of dates; let index">
-      <div class="ion-activatable ripple-parent rounded-rectangle" id="open-modal-edit" expand="block">
+      <div>
         <ion-grid>
         <ion-row id="date" class="ion-justify-content-between">
            <ion-col style="min-width: 55vw; font-size: small; display: flex; align-items: center;" size="4">{{date.date | date:'fullDate'}}</ion-col>
@@ -18,7 +18,7 @@
       </ion-grid> 
         <ion-row *ngFor="let movement of date.movements">
         <ion-grid>
-          <ion-row >
+          <ion-row (click)="editMovement(movement)">
             <ion-col style="display: flex; justify-content: center; align-items: center;padding-bottom: 0 !important; padding-right: 0 !important;"><ion-avatar  class="circle" [ngStyle]="{'background':movement.movementType===2 ? '#3FC53C' : movement.movementType===1 ? '#D11F1F' : movement.movementType===3 ? 'gray' : ''}" style="background: #D11F1F;">
               <ion-icon [name]="movement.categoryObj.icon" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
             </ion-avatar></ion-col>
@@ -28,51 +28,56 @@
                 <ion-col size="4.5" size-md="4" size-lg="2" class="topRow" style="text-align: end; font-weight: bold; padding-right:0 !important;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">{{movement.amount| currency:'USD':'symbol':'1.0-0'}}</ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
-                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow"style="font-weight: bold;">{{movement.categoryObj.description |titlecase}}</ion-col>
-                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow" style="text-align: end; color: #000; font-weight: bold; padding-right:0 !important;">{{movement.account|titlecase}}</ion-col>
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow"style="">{{movement.categoryObj.description |titlecase}}</ion-col>
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow" style="text-align: end; color: #000; font-weight: bold; padding-right:0 !important;">{{movement.accountObj.description|titlecase}}</ion-col>
               </ion-row>
             </ion-col>
           </ion-row>
-          <ion-ripple-effect></ion-ripple-effect> 
         </ion-grid> 
         </ion-row>
-        
       </div>
     </ion-item>
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <ion-modal #modal2 trigger="open-modal-edit">
+  <ion-modal #modalEditMovement>
     <ng-template>
-      <ion-content>
-        <ion-title>Nuevo</ion-title>
-        <ion-input placeholder="Descripción"></ion-input>
-        <ion-input label="$" type="number" placeholder="0.00"></ion-input>
-        <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime>
-        <ion-select label="Categoria" label-placement="floating" placeholder="Varios">
-          <ion-select-option *ngFor="let category of categories" [value]="category.id">{{category.description}}</ion-select-option>
-        </ion-select>
-        <ion-select label="Cuenta" label-placement="floating" placeholder="Efectivo">
-          <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
-        </ion-select>
-        <ion-toolbar>
+      <ion-content id="container">
+        <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+        <ion-title>Editar</ion-title>
+        </ion-header>
+        <form (ngSubmit)="confirmEditMovement(validatorEditMovement.value)" [formGroup]="validatorEditMovement">
+          <ion-input placeholder="Descripción"formControlName="description" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
+          <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
+          <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
+          <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
+            <ion-select-option *ngFor="let category of categories" [value]="category.id">{{category.description}}</ion-select-option>
+          </ion-select>
+          <ion-select label="Cuenta Origen" label-placement="floating" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
+            <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
+          </ion-select>
+          <ion-select *ngIf="MovementType===3" label="Cuenta Destino" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
+            <ion-select-option *ngFor="let wallet of destwallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
+          </ion-select>
+        <ion-toolbar class="toolbar-bottom">
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancelar</ion-button>
           </ion-buttons>
-          <ion-buttons slot="med">
+          <ion-buttons slot="end">
             <ion-button (click)="cancel()">Eliminar</ion-button>
           </ion-buttons>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Modificar</ion-button>
+            <ion-button *ngIf="MovementType!==3" type="submit" [disabled]="!validatorEditMovement.valid" [strong]="true" style="color:#4CA49C;">Modificar</ion-button>
           </ion-buttons>
         </ion-toolbar>
+      </form>
       </ion-content>
     </ng-template>
   </ion-modal>
   <ion-modal #modal1 trigger="open-modal-new">
     <ng-template>
-      <ion-content id="container">
+      <ion-content>
 
         <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
           <ion-title>Nuevo</ion-title>

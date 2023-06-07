@@ -19,4 +19,10 @@ export class MovementService {
     let direccion = this.url +user+"/movements";
     return this.http.get<DateMovs[]>(direccion);
   }
+  public editMovement(movementId:number,wallet:number,updatedMovement:NewMovement,category?:number,destinationWallet?:number):Observable<Movement>{
+    return this.http.put<Movement>(this.url+movementId+'/'+wallet+'/'+destinationWallet+'/'+category+'/movements',updatedMovement);
+  }
+  public deleteMovement(movementId:number):Observable<string>{
+    return this.http.delete<string>(this.url+'/deleteMovement/'+movementId);
+  }
 }

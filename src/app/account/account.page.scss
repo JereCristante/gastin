@@ -2,8 +2,77 @@ ion-toolbar{
     background-color: var(--ion-color-maing);
 }
 ion-title{
-    padding-left: 2vw !important;
     font-size: 4vh;
     font-weight: bold;
     color: #EFEBDD !important;
-  }
+}
+ion-content{
+    --ion-background-color: #BABEBE !important;
+    --ion-color: #30383A;
+}
+#LoginBtn{
+    --background: #4CA49C !important;
+    color: white !important;
+    --border-color: #4CA49C;
+    text-transform: none;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: 5vh;
+    --border-radius:10px !important;
+    margin-top: 3vh;
+}
+#LogOutBtn{
+    --background: #30383A !important;
+    color: white !important;
+    --border-color: #4CA49C;
+    text-transform: none;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: 5vh;
+    --border-radius:10px !important;
+    margin-top: 3vh;
+}
+.prototype{
+    height: 40vw;
+    width: 40vw;
+    --border-radius: 999px;
+    --padding-start:0 !important;
+    --padding-end:0 !important;
+    --background: #D9D9D9 !important;
+    --border-color: #4CA49C;
+}
+.input{
+    --background:#D9D9D9 !important;
+    --border-color:#4CA49C !important;
+    --padding-start: 3vw !important;
+    --border-top-left-radius: 10px;
+    --border-top-right-radius: 0%;
+    --border-bottom-left-radius: 10px;
+    --border-bottom-right-radius: 0%;
+    --border-radius: 
+    var(--border-top-left-radius) 
+    var(--border-top-right-radius) 
+    var(--border-bottom-right-radius)
+    var(--border-bottom-left-radius);
+    --border-width:20px !important;
+    --border-style: solid !important;
+    height: 7vh;
+    --color:#4CA49C !important;
+}
+.input-button{
+    --background: #4CA49C !important;
+    color: white !important;
+    --border-color: #4CA49C !important;
+    text-transform: none;
+    height: 7vh;
+    --border-top-left-radius: 0%;
+    --border-top-right-radius: 10px;
+    --border-bottom-left-radius: 0%;
+    --border-bottom-right-radius: 10px;
+    --border-radius: 
+    var(--border-top-left-radius) 
+    var(--border-top-right-radius) 
+    var(--border-bottom-right-radius)
+    var(--border-bottom-left-radius);
+    
+}

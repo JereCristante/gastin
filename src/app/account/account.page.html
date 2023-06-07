@@ -5,6 +5,23 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
-  
+  <div style="display:flex; justify-content: center; margin: 3vh;">
+    <ion-button class="prototype" fill="outline"><ion-icon slot="icon-only" name="person-outline" style="color: #4CA49C !important;font-size: 30vw;"></ion-icon></ion-button>
+  </div>
+  <div style="text-align: center;">
+    <ion-title style="color: #30383A !important;">Hola, {{user!.alias | titlecase}}!</ion-title>
+  </div>
+  <div style="text-align: center;">
+  <ion-title style="color: #30383A !important; font-size: smaller;">ID {{user!.id}}</ion-title>
+  </div>
+  <div style="display: flex; justify-content: center; align-items: center; margin-left: 5vw; margin-right: 5vw; margin-top: 3vh;">
+      <ion-input class="input" label="Alias" labelPlacement="floating" placeholder="Juan"></ion-input>
+    <ion-button class="input-button">Cambiar</ion-button>
+  </div>
+  <ion-button id="LoginBtn" expand="block" fill="outline" [routerLink]="'/login-form'">Cambiar contraseña</ion-button>
+  <div style="display: flex; justify-content: center; align-items: center; margin-left: 5vw; margin-right: 5vw; margin-top: 3vh;">
+    <ion-input class="input" label="ID Usuario Mayor" labelPlacement="floating" placeholder="0"></ion-input>
+  <ion-button class="input-button">Cambiar</ion-button>
+  </div>
+  <ion-button id="LogOutBtn" expand="block" fill="outline" [routerLink]="''">Cerrar Sesion</ion-button>
 </ion-content>

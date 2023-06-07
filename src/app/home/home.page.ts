@@ -19,7 +19,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  //@ViewChild(IonModal) modal1: IonModal;
+  @ViewChild('modalEditMovement') modalEditCategory: IonModal | undefined;
   items = ['Gasto 1'];
   dates: DateMovs[]=[];
   categories: Category[]=[];
@@ -30,7 +30,9 @@ export class HomePage implements OnInit {
   userTimezoneOffset = this.today.getTimezoneOffset(); // Obtén el desplazamiento de la zona horaria del usuario en minutos
   utcDate = new Date(this.today.getTime() - (this.userTimezoneOffset * 60 * 1000));
   validatorMovement!: FormGroup;
+  validatorEditMovement!: FormGroup;
   MovementType: number = 1;
+  editableMovement!: Movement;
   constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
     
     this.validatorMovement = this.fb.group({
@@ -41,7 +43,14 @@ export class HomePage implements OnInit {
       wallet: new FormControl('', Validators.compose([Validators.required])),
       destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
     });
-    
+    this.validatorEditMovement = this.fb.group({
+      description: new FormControl('', Validators.compose([Validators.required])),
+      amount: new FormControl('', Validators.compose([Validators.required])),
+      date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
+      category: new FormControl('', Validators.compose([Validators.required])),
+      wallet: new FormControl('', Validators.compose([Validators.required])),
+      destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
+    });
   }
   ngOnInit() {
     this.uS.getUserInfoByEmail(sessionStorage.getItem('AuthEmail')!).subscribe(
@@ -159,6 +168,8 @@ export class HomePage implements OnInit {
     }
 
     let movimiento = new NewMovement(value.description,value.amount,value.date,true);
+    console.log(value.date);
+    console.log(movimiento);
     //if(value.destinationWallet==''){
       //value.destinationWallet=0;
     //}
@@ -193,6 +204,62 @@ export class HomePage implements OnInit {
       this.validatorMovement.patchValue({category:0});
       //this.validatorMovement.patchValue({destinationWallet:''});
     }
+  }
+  editMovement(movement:Movement){
+    console.log(movement);
+    this.editableMovement=movement;
+    this.validatorEditMovement.patchValue({description:movement.description});
+    if(movement.movementType==1){
+    this.validatorEditMovement.patchValue({amount:(movement.amount)*-1});
+    }else{
+      this.validatorEditMovement.patchValue({amount:movement.amount});
+    }
+    this.validatorEditMovement.patchValue({date:new Date(movement.date!).toISOString()});
+    this.validatorEditMovement.patchValue({wallet:movement.account});
+    if(movement.movementType!=3){
+      this.validatorEditMovement.patchValue({category:movement.category});
+    }
+    this.modalEditCategory?.present();
+    
+  }
+  confirmEditMovement(value:any){
+    console.log(value);
+    let updatedMovement = new NewMovement(value.description,value.amount,value.date,true);
+    if(value.category==undefined){
+      value.category=0;
+    }
+    if(value.destinationWallet==undefined){
+      value.destinationWallet=0;
+    }
+    this.mS.editMovement(this.editableMovement.id,value.wallet,updatedMovement,value.category,value.destinationWallet).subscribe(
+      data=> {
+        this.validatorEditMovement.reset();
+        this.closeModal();
+      },
+      error => {
+         //Manejar el error aquí
+        if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        }
+        
+      }
+    );
+  }
+  deleteMovement(movement:number){
+    this.mS.deleteMovement(movement).subscribe(
+      data=> {
+        this.closeModal();
+      },
+      error => {
+         //Manejar el error aquí
+        if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        }
+        
+      }
+    );
   }
   onSelectionChange(event: any) {
     const selectedWallet = event.detail.value;
