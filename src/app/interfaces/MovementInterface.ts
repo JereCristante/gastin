@@ -11,4 +11,5 @@ export interface Movement{
     categoryObj:Category;
     accountObj:Wallet;
     movementType?: number;
+    transfer?:number;
 };

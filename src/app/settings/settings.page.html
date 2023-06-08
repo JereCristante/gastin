@@ -38,7 +38,7 @@
     <ion-avatar  class="circle" style="background: #3FC53C;">
     <ion-icon [name]="category.icon" color="white" style="font-size: 24px;"></ion-icon>
     </ion-avatar>
-    <ion-label class="title">{{category.description}}</ion-label>
+    <ion-label class="title">{{category.description | titlecase}}</ion-label>
   </ion-col>
   </ion-row>
   </ion-grid>
@@ -50,7 +50,7 @@
       </ion-header>
       <form (ngSubmit)="confirmEditCategory(validatorCategoryUpdate.value)" [formGroup]="validatorCategoryUpdate">
         <div style="display: flex; align-items: center; margin: 4vw;">
-          <ion-icon name="document-text-outline" style="font-size: 26px; color:#30383A"></ion-icon><ion-input  placeholder="Descripción"formControlName="description" style="height: 7vh !important; margin-left:1vw;font-size: 22px !important; color:#30383A;"></ion-input>
+          <ion-icon name="document-text-outline" style="font-size: 26px; color:#30383A"></ion-icon><ion-input  placeholder="Descripción"formControlName="description" maxlength="18" style="height: 7vh !important; margin-left:1vw;font-size: 22px !important; color:#30383A;"></ion-input>
         </div>
           <div style="display:flex; justify-content: center;">
             <ion-segment (ionChange)="typeChanged($event)" [value]="categoryTypeEdit" ng="iconColor" style="min-height: 5vh !important; height: 5vh !important; border-radius: 10px; max-width: 90vw; margin: 4vw; background:  #D9D9D9 !important;" >
@@ -94,7 +94,7 @@
       </ion-header>
       <form (ngSubmit)="newCategory(validatorCategory.value)" [formGroup]="validatorCategory">
         <div style="display: flex; align-items: center; margin: 4vw;">
-          <ion-icon name="document-text-outline" style="font-size: 26px; color:#30383A"></ion-icon><ion-input  placeholder="Descripción"formControlName="description" style="height: 7vh !important; margin-left:1vw;font-size: 22px !important; color:#30383A;"></ion-input>
+          <ion-icon name="document-text-outline" style="font-size: 26px; color:#30383A"></ion-icon><ion-input maxlength="18" placeholder="Descripción"formControlName="description" style="height: 7vh !important; margin-left:1vw;font-size: 22px !important; color:#30383A;"></ion-input>
         </div>
           <div style="display:flex; justify-content: center;">
             <ion-segment (ionChange)="typeChanged($event)" value="1" ng="iconColor" style="min-height: 5vh !important; height: 5vh !important; border-radius: 10px; max-width: 90vw; margin: 4vw; background:  #D9D9D9 !important;" >

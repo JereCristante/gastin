@@ -13,6 +13,7 @@ import { User } from '../interfaces/UserInterface';
 import { AuthService } from '../Services/auth.service';
 import { NewMovement } from '../interfaces/NewMovement';
 import { ModalController } from '@ionic/angular';
+import { Dialog } from '@capacitor/dialog';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -33,10 +34,11 @@ export class HomePage implements OnInit {
   validatorEditMovement!: FormGroup;
   MovementType: number = 1;
   editableMovement!: Movement;
+  confirmDelete= '';
   constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
     
     this.validatorMovement = this.fb.group({
-      description: new FormControl('', Validators.compose([Validators.required])),
+      description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
       amount: new FormControl('', Validators.compose([Validators.required])),
       date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
       category: new FormControl('', Validators.compose([Validators.required])),
@@ -44,7 +46,7 @@ export class HomePage implements OnInit {
       destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
     });
     this.validatorEditMovement = this.fb.group({
-      description: new FormControl('', Validators.compose([Validators.required])),
+      description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
       amount: new FormControl('', Validators.compose([Validators.required])),
       date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
       category: new FormControl('', Validators.compose([Validators.required])),
@@ -99,7 +101,7 @@ export class HomePage implements OnInit {
     }, 2000);
   };
   refreshCategories(){
-    this.uS.getCategoriesByUser(this.user!.id,this.MovementType).subscribe(
+    this.uS.getCategoriesByUser(this.user!.id!,this.MovementType).subscribe(
       data=> {
         this.categories=data;
         if(this.categories[0].id){
@@ -118,7 +120,7 @@ export class HomePage implements OnInit {
     );
   }
   refreshWallets(){
-    this.uS.getAccountsByUser(this.user!.id).subscribe(
+    this.uS.getAccountsByUser(this.user!.id!).subscribe(
       data=> {
         this.wallets=data;
         this.destwallets=data;
@@ -135,7 +137,7 @@ export class HomePage implements OnInit {
     );
   }
   refreshMovements(){
-    this.mS.getMovementsByUser(this.user!.id).subscribe(
+    this.mS.getMovementsByUser(this.user!.id!).subscribe(
       data=> {
         this.dates=data;
       },
@@ -173,7 +175,7 @@ export class HomePage implements OnInit {
     //if(value.destinationWallet==''){
       //value.destinationWallet=0;
     //}
-    this.mS.newMovement(this.user!.id,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
+    this.mS.newMovement(this.user!.id!,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
       data=> {
         this.validatorMovement.reset();
         this.closeModal();
@@ -231,7 +233,10 @@ export class HomePage implements OnInit {
     if(value.destinationWallet==undefined){
       value.destinationWallet=0;
     }
-    this.mS.editMovement(this.editableMovement.id,value.wallet,updatedMovement,value.category,value.destinationWallet).subscribe(
+    if(this.editableMovement.transfer==undefined){
+      this.editableMovement.transfer=0;
+    }
+    this.mS.editMovement(this.editableMovement.id,value.wallet,updatedMovement,value.category,value.destinationWallet,this.editableMovement.transfer).subscribe(
       data=> {
         this.validatorEditMovement.reset();
         this.closeModal();
@@ -246,20 +251,37 @@ export class HomePage implements OnInit {
       }
     );
   }
+  public alertButtons = [
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+      handler: () => {
+        this.confirmDelete = 'no';
+      },
+    },
+    {
+      text: 'Eliminar',
+      role: 'confirm',
+      handler: () => {
+        this.confirmDelete = 'yes';
+      },
+    },
+  ];
   deleteMovement(movement:number){
+    if(this.confirmDelete=='yes'){
     this.mS.deleteMovement(movement).subscribe(
       data=> {
         this.closeModal();
       },
       error => {
          //Manejar el error aquí
-        if(error.status!=302){
+        if(error.status!=200){
           alert(error.error);
           console.log(error)
         }
         
       }
-    );
+    )};
   }
   onSelectionChange(event: any) {
     const selectedWallet = event.detail.value;

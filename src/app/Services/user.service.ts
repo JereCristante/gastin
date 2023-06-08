@@ -40,5 +40,16 @@ export class UserService {
     let direccion = this.url +"categories/"+category.id+"/"+type+"/categories";
     return this.http.put<Category>(direccion,category);
   }
-
+  newAccount(user:number, wallet:Wallet): Observable<Wallet>{
+    let direccion = this.url +"accounts/"+user+"/accounts";
+    return this.http.post<Wallet>(direccion,wallet);
+  }
+  updateAccount(id:number,wallet:Wallet): Observable<Wallet>{
+    let direccion = this.url +"accounts/"+id+"/accounts";
+    return this.http.post<Wallet>(direccion,wallet);
+  }
+  updateUser(id:number,user:User):Observable<User>{
+    let direccion = this.url +"users/"+id;
+    return this.http.put<User>(direccion,user);
+  }
 }

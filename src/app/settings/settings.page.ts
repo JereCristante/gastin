@@ -91,7 +91,7 @@ export class SettingsPage implements OnInit {
     );
   }
   refreshCategories(){
-    this.uS.getCategoriesByUser(this.user!.id,1).subscribe(
+    this.uS.getCategoriesByUser(this.user!.id!,1).subscribe(
       data=> {
         this.spentCategories=data;
       },
@@ -104,7 +104,7 @@ export class SettingsPage implements OnInit {
         
       }
     );
-    this.uS.getCategoriesByUser(this.user!.id,2).subscribe(
+    this.uS.getCategoriesByUser(this.user!.id!,2).subscribe(
       data=> {
         this.incomeCategories=data;
       },
@@ -139,7 +139,7 @@ export class SettingsPage implements OnInit {
         return;
     }
     let newCategory: Category = new Category(value.description,this.selectedIcon);
-    this.uS.newCategory(this.user!.id,this.selectedType,newCategory).subscribe(
+    this.uS.newCategory(this.user!.id!,this.selectedType,newCategory).subscribe(
       data=> {
         this.validatorCategory.reset();
         this.closeModal();

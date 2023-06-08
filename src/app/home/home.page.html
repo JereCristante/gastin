@@ -48,7 +48,7 @@
         <ion-title>Editar</ion-title>
         </ion-header>
         <form (ngSubmit)="confirmEditMovement(validatorEditMovement.value)" [formGroup]="validatorEditMovement">
-          <ion-input placeholder="Descripción"formControlName="description" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
+          <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
           <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
           <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
           <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
@@ -65,8 +65,14 @@
             <ion-button (click)="cancel()">Cancelar</ion-button>
           </ion-buttons>
           <ion-buttons slot="end">
-            <ion-button (click)="cancel()">Eliminar</ion-button>
+             <ion-button id="confirm-delete-alert">Eliminar</ion-button> 
           </ion-buttons>
+          <ion-alert
+          trigger="confirm-delete-alert"
+          header="Desea eliminar el moviemiento?"
+          [buttons]="alertButtons"
+          (didDismiss)="deleteMovement(editableMovement.id)"
+          ></ion-alert>
           <ion-buttons slot="end">
             <ion-button *ngIf="MovementType!==3" type="submit" [disabled]="!validatorEditMovement.valid" [strong]="true" style="color:#4CA49C;">Modificar</ion-button>
           </ion-buttons>
@@ -96,7 +102,7 @@
           </ion-toolbar>
         </ion-header>
         <form (ngSubmit)="confirmMovement(validatorMovement.value)" [formGroup]="validatorMovement">
-        <ion-input placeholder="Descripción"formControlName="description" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
+        <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
         <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
         <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
         <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
@@ -112,11 +118,11 @@
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancelar</ion-button>
           </ion-buttons>
-          <ion-buttons slot="">
-            <ion-button (click)="confirm()"><ion-icon name="time-outline"> </ion-icon> Programar</ion-button>
-          </ion-buttons>
           <ion-buttons slot="end">
             <ion-button type="submit" [disabled]="!validatorMovement.valid" [strong]="true" style="color:#4CA49C;">Agregar</ion-button>
+          </ion-buttons>
+          <ion-buttons slot="primary">
+            <ion-button (click)="confirm()"><ion-icon name="time-outline"> </ion-icon> Programar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </form>

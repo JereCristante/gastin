@@ -10,16 +10,20 @@ import { User } from '../interfaces/UserInterface';
   styleUrls: ['./account.page.scss'],
 })
 export class AccountPage implements OnInit {
-  wallets: WalletReport[]=[];
   user?:User;
-
-  constructor(private uS:UserService) { }
-
+  alias?: string;
+  idUpperUser: number=0;
+  constructor(private uS:UserService) { 
+  }
   ngOnInit() {
+    this.refreshUser();
+  }
+  refreshUser(){
     this.uS.getUserInfoByEmail(sessionStorage.getItem('AuthEmail')!).subscribe(
       data=> {
         this.user=data;
-        this.refreshWallets();
+        this.alias=this.user.alias!;
+        this.idUpperUser=this.user.idUpperUser!;
       },
       error => {
         // Manejar el error aquí
@@ -30,20 +34,34 @@ export class AccountPage implements OnInit {
       }
     );
   }
-  refreshWallets() {
-    this.uS.getAccountsByUserWithMovements(this.user!.id).subscribe(
+  updateAlias(){
+    let user: User = {alias:this.alias}
+    this.uS.updateUser(this.user?.id!,user).subscribe(
       data=> {
-        this.wallets=data;
+        this.refreshUser();
       },
       error => {
         // Manejar el error aquí
-        //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
-        //}
-        
+          //if(error.status!=200){
+            alert(error.error);
+            console.log(error)
+          //}
       }
     );
   }
-
+  updateIdUser(){
+    let user: User = {idUpperUser:this.idUpperUser}
+    this.uS.updateUser(this.user?.id!,user).subscribe(
+      data=> {
+        this.refreshUser();
+      },
+      error => {
+        // Manejar el error aquí
+          //if(error.status!=200){
+            alert(error.error);
+            console.log(error)
+          //}
+      }
+    );
+  }
 }
