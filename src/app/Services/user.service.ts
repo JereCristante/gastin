@@ -5,6 +5,8 @@ import {Observable} from 'rxjs';
 import { Category } from '../interfaces/CategoryInterface';
 import { Wallet } from '../interfaces/WalletInterface';
 import { WalletReport } from '../interfaces/WalletReportInterface';
+import { Schedule } from '../interfaces/ScheduleInterface';
+import { newSchedule } from '../interfaces/newScheduleInterface';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +25,10 @@ export class UserService {
   getCategoriesByUser(user:number,type:number): Observable<Category[]>{
     let direccion = this.url +"categories/"+user+"/"+type+"/categories";
     return this.http.get<Category[]>(direccion);
+  }
+  getSchedulesByUser(user:number): Observable<Schedule[]>{
+    let direccion = this.url +"schedules/"+user;
+    return this.http.get<Schedule[]>(direccion);
   }
   getAccountsByUser(user:number): Observable<Wallet[]>{
     let direccion = this.url +"accounts/"+user+"/accounts";
@@ -51,5 +57,13 @@ export class UserService {
   updateUser(id:number,user:User):Observable<User>{
     let direccion = this.url +"users/"+id;
     return this.http.put<User>(direccion,user);
+  }
+  deleteSchedule(id:number): Observable<String>{
+    let direccion = this.url +"schedules/deleteSchedule/"+id;
+    return this.http.delete<String>(direccion);
+  }
+  newSchedule(schedule:newSchedule):Observable<Schedule>{
+    let direccion = this.url +"schedules/new";
+    return this.http.post<Schedule>(direccion,schedule);
   }
 }

@@ -1,7 +1,10 @@
+import { Movement } from "./MovementInterface";
+
 export interface Schedule{
-    id: Number;
-    day: Number;
-    total_payments: Number;
-    payed: Number;
-    
+    id: number;
+    day: number;
+    payed: number;
+    total_payments: number;
+    original_movement_id: Movement;
+    active: boolean;
 }

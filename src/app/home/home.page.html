@@ -102,7 +102,7 @@
           </ion-toolbar>
         </ion-header>
         <form (ngSubmit)="confirmMovement(validatorMovement.value)" [formGroup]="validatorMovement">
-        <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
+        <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 6vh; font-size: 22px !important;"></ion-input>
         <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
         <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
         <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
@@ -114,6 +114,9 @@
         <ion-select *ngIf="MovementType===3" label="Cuenta Destino" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
           <ion-select-option *ngFor="let wallet of destwallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
         </ion-select>
+        <ion-select *ngIf="MovementType!==3" label="Repetir mensualmente" label-placement="floating" placeholder="No" formControlName="reps">
+          <ion-select-option *ngFor="let rep of repetitions" [value]="rep.times">{{rep.text}}</ion-select-option>
+        </ion-select>
         <ion-toolbar class="toolbar-bottom">
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancelar</ion-button>
@@ -121,28 +124,71 @@
           <ion-buttons slot="end">
             <ion-button type="submit" [disabled]="!validatorMovement.valid" [strong]="true" style="color:#4CA49C;">Agregar</ion-button>
           </ion-buttons>
-          <ion-buttons slot="primary">
-            <ion-button (click)="confirm()"><ion-icon name="time-outline"> </ion-icon> Programar</ion-button>
-          </ion-buttons>
         </ion-toolbar>
       </form>
       </ion-content>
     </ng-template>
   </ion-modal>
+  <ion-modal #modal2 trigger="open-modal-scheduled">
+    <ng-template>
+      <ion-content>
+        <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+          <ion-title>Programados</ion-title>
+        </ion-header>
+        <ion-list>
+          <ion-item *ngFor="let schedule of activeSchedules; let index">
+              <ion-grid>
+                <ion-row class="ScheduleItem">
+                  <ion-col size="7">
+                    <ion-row>
+                      <ion-col size="12" style=" color: #000; font-weight: bold;">{{schedule.original_movement_id.description | titlecase}}</ion-col>
+                      <ion-col size="12" style=" color: #000; font-weight: bold;">Los {{schedule.day}} de cada mes!</ion-col>
+                    </ion-row>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-row>
+                      <ion-col size="12" size-md="2" size-lg="2" style="display: flex; justify-content: center; align-items: center; font-weight: bold;" [ngStyle]="{'color':schedule.original_movement_id.amount>=0 ? '#3FC53C' : '#D11F1F'}">{{schedule.original_movement_id.amount | currency:'USD':'symbol':'1.0-0'}}
+                      </ion-col>
+                      <ion-col size="12" size-md="2" size-lg="2" style="display: flex; justify-content: center; align-items: center; color: #000; font-weight: bold;">{{schedule.payed}}|{{schedule.total_payments}}
+                      </ion-col>
+                    </ion-row>
+                  </ion-col>
+                  <ion-col size="2"  style="display: flex; justify-content: center; align-items: center;padding-bottom: 0 !important; padding-right: 0 !important;"><ion-avatar id="confirm-delete-schedule"class="circle" style="background: #D11F1F;">
+                    <ion-icon name="trash-outline" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
+                  </ion-avatar></ion-col>
+                  <ion-alert
+                  trigger="confirm-delete-schedule"
+                  [header]="scheduleAlertHeader"
+                  [buttons]="alertButtons"
+                  (didDismiss)="deleteSchedule(schedule.id)"
+                  ></ion-alert>
+                </ion-row>
+              </ion-grid> 
+          </ion-item>
+        </ion-list>
+        <ion-toolbar class="toolbar-bottom">
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancelar</ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button type="submit" [disabled]="!validatorMovement.valid" [strong]="true" style="color:#4CA49C;">Guardar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+ 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="success" id="open-modal-new">
-      <ion-icon name="add-outline" id="plus" style="color: #EFEBDD !important; font-size: 10vw;"></ion-icon>
+    <ion-fab-button color="success">
+      <ion-icon name="add" style="color: #EFEBDD !important;"></ion-icon>
     </ion-fab-button>
-    <!-- POR LAS DUDAS<ion-fab-list side="top">
-      <ion-fab-button>
-        <ion-icon name="document"></ion-icon>
+  <ion-fab-list side="top">
+    <ion-fab-button color="success" id="open-modal-new">
+      <ion-icon name="add-outline" id="plus" style="color: #EFEBDD !important; font-size: 7vw;"></ion-icon>
+    </ion-fab-button>
+      <ion-fab-button color="success" id="open-modal-scheduled">
+        <ion-icon name="time-outline" id="plus" style="color: #EFEBDD !important; font-size: 7vw;"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="color-palette"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="globe"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list> -->
+  </ion-fab-list> 
   </ion-fab>
 </ion-content>

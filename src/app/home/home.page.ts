@@ -14,6 +14,9 @@ import { AuthService } from '../Services/auth.service';
 import { NewMovement } from '../interfaces/NewMovement';
 import { ModalController } from '@ionic/angular';
 import { Dialog } from '@capacitor/dialog';
+import { Schedule } from '../interfaces/ScheduleInterface';
+import { newSchedule } from '../interfaces/newScheduleInterface';
+import { Reps } from '../interfaces/RepsInterface';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -27,6 +30,7 @@ export class HomePage implements OnInit {
   wallets: Wallet[]=[];
   destwallets: Wallet[]=[];
   user?:User;
+  activeSchedules: Schedule[]=[];
   today = new Date();
   userTimezoneOffset = this.today.getTimezoneOffset(); // Obtén el desplazamiento de la zona horaria del usuario en minutos
   utcDate = new Date(this.today.getTime() - (this.userTimezoneOffset * 60 * 1000));
@@ -35,6 +39,9 @@ export class HomePage implements OnInit {
   MovementType: number = 1;
   editableMovement!: Movement;
   confirmDelete= '';
+  confirmSchedule='';
+  repetitions: Reps[] = [{times:3,text:"3 veces"}, {times:6,text:"6 veces"},{times:9,text:"9 veces"},{times:12,text:"12 veces"},{times:18,text:"18 veces"},{times:24,text:"24 veces"},{times:36,text:"36 veces"}]; 
+  scheduleAlertHeader="Desea eliminar la programación? Esto no eliminará los movimientos ya realizados";
   constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
     
     this.validatorMovement = this.fb.group({
@@ -43,7 +50,8 @@ export class HomePage implements OnInit {
       date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
       category: new FormControl('', Validators.compose([Validators.required])),
       wallet: new FormControl('', Validators.compose([Validators.required])),
-      destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
+      destinationWallet: new FormControl(0, Validators.compose([Validators.required])),
+      reps: new FormControl(0)
     });
     this.validatorEditMovement = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
@@ -61,6 +69,7 @@ export class HomePage implements OnInit {
         this.refreshCategories();
         this.refreshWallets();
         this.refreshMovements();
+        this.refreshSchedules();
       },
       error => {
         // Manejar el error aquí
@@ -74,13 +83,6 @@ export class HomePage implements OnInit {
     
     
   }
-
-  private generateItems() {
-    const count = this.items.length + 1;
-    for (let i = 0; i < 50; i++) {
-      this.items.push(`Gasto ${count + i}`);
-    }
-  }
   closeModal() {
     this.refreshWallets();
     this.refreshCategories();
@@ -89,16 +91,16 @@ export class HomePage implements OnInit {
     this.modalController.dismiss();
   }
   onIonInfinite(ev: any) {
-    this.generateItems();
     setTimeout(() => {
       (ev as InfiniteScrollCustomEvent).target.complete();
     }, 500);
   }
   handleRefresh(event: any) {
     setTimeout(() => {
-      // Any calls to load data go here
+      this.refreshMovements();
       event.target.complete();
     }, 2000);
+  
   };
   refreshCategories(){
     this.uS.getCategoriesByUser(this.user!.id!,this.MovementType).subscribe(
@@ -108,6 +110,21 @@ export class HomePage implements OnInit {
           this.validatorMovement.patchValue({category:this.categories[0].id});
         }
         
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
+  refreshSchedules(){
+    this.uS.getSchedulesByUser(this.user!.id!).subscribe(
+      data=> {
+        this.activeSchedules=data;     
       },
       error => {
         // Manejar el error aquí
@@ -177,8 +194,29 @@ export class HomePage implements OnInit {
     //}
     this.mS.newMovement(this.user!.id!,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
       data=> {
+        if(value.reps!=0){
+          let day = new Date((value.date)).getUTCDate();
+          let schedule = new newSchedule(day,value.reps,1,true,data.id);
+          console.log(schedule);
+          this.uS.newSchedule(schedule).subscribe(
+            data=> {
+              this.refreshSchedules();
+              this.validatorMovement.reset();
+              this.closeModal();
+            },
+            error => {
+               //Manejar el error aquí
+              if(error.status!=200){
+                alert(error.error);
+                console.log(error)
+              }
+              
+            }
+          );
+        }
         this.validatorMovement.reset();
         this.closeModal();
+
       },
       error => {
         // Manejar el error aquí
@@ -267,11 +305,61 @@ export class HomePage implements OnInit {
       },
     },
   ];
+  newSchedule(value:any){
+    if(value.amount <0.01){
+      alert('El monto debe ser minimo 1 centavo');
+        return;
+    }
+    if(this.MovementType===1){
+      const Selectedwallet = this.wallets.find((wallet) => wallet.id === value.wallet);
+      if(value.amount > Selectedwallet!.balance){
+        alert('El monto de la operacion es mayor al saldo de la cuenta seleccionada');
+        return;
+      }
+    }
+
+    let movimiento = new NewMovement(value.description,value.amount,value.date,true);
+    console.log(value.date);
+    console.log(movimiento);
+    //if(value.destinationWallet==''){
+      //value.destinationWallet=0;
+    //}
+    this.mS.newMovement(this.user!.id!,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
+      data=> {
+        
+        
+      },
+      error => {
+        // Manejar el error aquí
+        //if(error.status!=302){
+          alert(error.error);
+          console.log(error)
+        //}
+        
+      }
+    );
+  }
   deleteMovement(movement:number){
     if(this.confirmDelete=='yes'){
     this.mS.deleteMovement(movement).subscribe(
       data=> {
         this.closeModal();
+      },
+      error => {
+         //Manejar el error aquí
+        if(error.status!=200){
+          alert(error.error);
+          console.log(error)
+        }
+        
+      }
+    )};
+  }
+  deleteSchedule(schedule:number){
+    if(this.confirmDelete=='yes'){
+    this.uS.deleteSchedule(schedule).subscribe(
+      data=> {
+        this.refreshSchedules();
       },
       error => {
          //Manejar el error aquí
