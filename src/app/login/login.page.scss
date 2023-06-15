@@ -3,7 +3,6 @@ ion-card{
     background-color: #30383A !important;
     border: none;
     box-shadow: none;
-
 }
 #LoginBtn{
     --background: #30383A !important;
@@ -35,4 +34,9 @@ ion-content{
     margin: 0 auto !important;
     height: 100% !important;
     justify-content: space-between !important;
+}
+#img-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

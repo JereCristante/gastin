@@ -19,7 +19,7 @@
     <ion-row style="margin-left: 2.5vh;">
     <ion-col *ngFor="let category of spentCategories" class="category" size="6" size-md="4" size-lg="2" (click)="EditCategory(category,1)">
       <ion-avatar  class="circle" style="background: #D11F1F;">
-        <ion-icon [name]="category.icon" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
+        <ion-icon [name]="category.icon"  style="font-size: 28px; display: flex; justify-content: center; color: white;"></ion-icon>
       </ion-avatar>
         <ion-label class="title">{{category.description | titlecase}}</ion-label>
     </ion-col>
@@ -36,7 +36,7 @@
     <ion-row style="margin-left: 2.5vh;">
     <ion-col *ngFor="let category of incomeCategories" class="category" size="6" size-md="4" size-lg="2" (click)="EditCategory(category,2)">
     <ion-avatar  class="circle" style="background: #3FC53C;">
-    <ion-icon [name]="category.icon" color="white" style="font-size: 24px;"></ion-icon>
+    <ion-icon [name]="category.icon"  style="font-size: 24px; color: white;"></ion-icon>
     </ion-avatar>
     <ion-label class="title">{{category.description | titlecase}}</ion-label>
   </ion-col>
@@ -130,7 +130,7 @@
     </ng-template>
   </ion-modal>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="success" id="open-modal-new-category">
+    <ion-fab-button style="--background: #4CA49C !important;" id="open-modal-new-category">
       <ion-icon name="add-outline" id="plus" style="color: #EFEBDD !important; font-size: 10vw;" ></ion-icon>
     </ion-fab-button>
   </ion-fab>

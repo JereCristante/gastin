@@ -7,11 +7,12 @@ import { Wallet } from '../interfaces/WalletInterface';
 import { WalletReport } from '../interfaces/WalletReportInterface';
 import { Schedule } from '../interfaces/ScheduleInterface';
 import { newSchedule } from '../interfaces/newScheduleInterface';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  url:string="http://localhost:8080/api/";
+  url:string=environment.backendLink;
   constructor(private http:HttpClient) { }
 
   SignUp(user:User): Observable<User>{

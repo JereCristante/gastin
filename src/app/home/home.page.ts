@@ -13,7 +13,6 @@ import { User } from '../interfaces/UserInterface';
 import { AuthService } from '../Services/auth.service';
 import { NewMovement } from '../interfaces/NewMovement';
 import { ModalController } from '@ionic/angular';
-import { Dialog } from '@capacitor/dialog';
 import { Schedule } from '../interfaces/ScheduleInterface';
 import { newSchedule } from '../interfaces/newScheduleInterface';
 import { Reps } from '../interfaces/RepsInterface';
@@ -42,6 +41,8 @@ export class HomePage implements OnInit {
   confirmSchedule='';
   repetitions: Reps[] = [{times:3,text:"3 veces"}, {times:6,text:"6 veces"},{times:9,text:"9 veces"},{times:12,text:"12 veces"},{times:18,text:"18 veces"},{times:24,text:"24 veces"},{times:36,text:"36 veces"}]; 
   scheduleAlertHeader="Desea eliminar la programación? Esto no eliminará los movimientos ya realizados";
+  alertError= false;
+  errorMsg="Error"
   constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
     
     this.validatorMovement = this.fb.group({
@@ -74,14 +75,19 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
           //if(error.status!=200){
-            alert(error.error);
-            console.log(error)
+            this.alertErrorOpen(true);
+            console.log(error.error);
           //}
       }
     );
-
-    
-    
+  }
+  alertErrorOpen(bool :boolean,msg?:string){
+    if(msg){
+      this.errorMsg=msg;
+    }else{
+      this.errorMsg="Error";
+    }
+    this.alertError=bool;
   }
   closeModal() {
     this.refreshWallets();
@@ -114,7 +120,7 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         //}
         
@@ -129,7 +135,7 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         //}
         
@@ -146,7 +152,7 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         //}
         
@@ -161,7 +167,7 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         //}
         
@@ -171,17 +177,17 @@ export class HomePage implements OnInit {
   confirmMovement(value:any){
     console.log(value);
     if(value.amount <0.01){
-      alert('El monto debe ser minimo 1 centavo');
+      this.alertErrorOpen(true,'El monto debe ser minimo 1 centavo');
         return;
     }
     if(this.MovementType===1 || this.MovementType===3){
       const Selectedwallet = this.wallets.find((wallet) => wallet.id === value.wallet);
       if(value.amount > Selectedwallet!.balance){
-        alert('El monto de la operacion es mayor al saldo de la cuenta seleccionada');
+        this.alertErrorOpen(true,'El monto de la operacion es mayor al saldo de la cuenta seleccionada');
         return;
       }
       if(value.wallet === value.destinationWallet){
-        alert('La cuenta de origen no puede ser la misma que la de destino');
+        this.alertErrorOpen(true,'La cuenta de origen no puede ser la misma que la de destino');
         return;
       }
     }
@@ -207,7 +213,7 @@ export class HomePage implements OnInit {
             error => {
                //Manejar el error aquí
               if(error.status!=200){
-                alert(error.error);
+                this.alertErrorOpen(true);
                 console.log(error)
               }
               
@@ -221,7 +227,7 @@ export class HomePage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         //}
         
@@ -282,7 +288,7 @@ export class HomePage implements OnInit {
       error => {
          //Manejar el error aquí
         if(error.status!=302){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         }
         
@@ -305,40 +311,6 @@ export class HomePage implements OnInit {
       },
     },
   ];
-  newSchedule(value:any){
-    if(value.amount <0.01){
-      alert('El monto debe ser minimo 1 centavo');
-        return;
-    }
-    if(this.MovementType===1){
-      const Selectedwallet = this.wallets.find((wallet) => wallet.id === value.wallet);
-      if(value.amount > Selectedwallet!.balance){
-        alert('El monto de la operacion es mayor al saldo de la cuenta seleccionada');
-        return;
-      }
-    }
-
-    let movimiento = new NewMovement(value.description,value.amount,value.date,true);
-    console.log(value.date);
-    console.log(movimiento);
-    //if(value.destinationWallet==''){
-      //value.destinationWallet=0;
-    //}
-    this.mS.newMovement(this.user!.id!,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
-      data=> {
-        
-        
-      },
-      error => {
-        // Manejar el error aquí
-        //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
-        //}
-        
-      }
-    );
-  }
   deleteMovement(movement:number){
     if(this.confirmDelete=='yes'){
     this.mS.deleteMovement(movement).subscribe(
@@ -348,7 +320,7 @@ export class HomePage implements OnInit {
       error => {
          //Manejar el error aquí
         if(error.status!=200){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         }
         
@@ -364,7 +336,7 @@ export class HomePage implements OnInit {
       error => {
          //Manejar el error aquí
         if(error.status!=200){
-          alert(error.error);
+          this.alertErrorOpen(true);
           console.log(error)
         }
         

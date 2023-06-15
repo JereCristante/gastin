@@ -20,7 +20,7 @@
         <ion-grid>
           <ion-row (click)="editMovement(movement)">
             <ion-col style="display: flex; justify-content: center; align-items: center;padding-bottom: 0 !important; padding-right: 0 !important;"><ion-avatar  class="circle" [ngStyle]="{'background':movement.movementType===2 ? '#3FC53C' : movement.movementType===1 ? '#D11F1F' : movement.movementType===3 ? 'gray' : ''}" style="background: #D11F1F;">
-              <ion-icon [name]="movement.categoryObj.icon" color="white" style="font-size: 28px; display: flex; justify-content: center;"></ion-icon>
+              <ion-icon [name]="movement.categoryObj.icon" style="font-size: 28px; display: flex; justify-content: center; color: #EFEBDD;"></ion-icon>
             </ion-avatar></ion-col>
             <ion-col size="10" size-md="10" size-lg="4" style="padding-bottom: 0 !important; padding-left: 0 !important;">
               <ion-row class="ion-justify-content-between">
@@ -28,8 +28,8 @@
                 <ion-col size="4.5" size-md="4" size-lg="2" class="topRow" style="text-align: end; font-weight: bold; padding-right:0 !important;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">{{movement.amount| currency:'USD':'symbol':'1.0-0'}}</ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
-                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow"style="">{{movement.categoryObj.description |titlecase}}</ion-col>
-                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow" style="text-align: end; color: #000; font-weight: bold; padding-right:0 !important;">{{movement.accountObj.description|titlecase}}</ion-col>
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow"style="color: white">{{movement.categoryObj.description |titlecase}}</ion-col>
+                <ion-col size="6" size-md="4" size-lg="2" class="bottomRow" style="text-align: end; color: white; font-weight: bold; padding-right:0 !important;">{{movement.accountObj.description|titlecase}}</ion-col>
               </ion-row>
             </ion-col>
           </ion-row>
@@ -51,13 +51,13 @@
           <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 8vh; font-size: 22px !important;"></ion-input>
           <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
           <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
-          <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
+          <ion-select *ngIf="MovementType!==3"label="Categoria" interface="action-sheet" label-placement="floating" placeholder="Varios" formControlName="category">
             <ion-select-option *ngFor="let category of categories" [value]="category.id">{{category.description}}</ion-select-option>
           </ion-select>
-          <ion-select label="Cuenta Origen" label-placement="floating" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
+          <ion-select label="Cuenta Origen" label-placement="floating" interface="action-sheet" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
             <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
           </ion-select>
-          <ion-select *ngIf="MovementType===3" label="Cuenta Destino" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
+          <ion-select *ngIf="MovementType===3" label="Cuenta Destino" interface="action-sheet" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
             <ion-select-option *ngFor="let wallet of destwallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
           </ion-select>
         <ion-toolbar class="toolbar-bottom">
@@ -105,13 +105,13 @@
         <ion-input placeholder="Descripción"formControlName="description" maxlength="18" style="--padding-top: 6vh; font-size: 22px !important;"></ion-input>
         <ion-input label="$" formControlName="amount" type="number" step="0.01" min="0,01" placeholder="0,00" id="amount"></ion-input>
         <ion-datetime formControlName="date" presentation="date-time" [preferWheel]="true" style="height: 25vh; margin: 3vh; width: 10vw;"></ion-datetime>
-        <ion-select *ngIf="MovementType!==3"label="Categoria" label-placement="floating" placeholder="Varios" formControlName="category">
+        <ion-select *ngIf="MovementType!==3"label="Categoria" interface="action-sheet" label-placement="floating" placeholder="Varios" formControlName="category">
           <ion-select-option *ngFor="let category of categories" [value]="category.id">{{category.description}}</ion-select-option>
         </ion-select>
-        <ion-select label="Cuenta Origen" label-placement="floating" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
+        <ion-select label="Cuenta Origen" label-placement="floating" interface="action-sheet" placeholder="Seleccionar" formControlName="wallet" (ionChange)="onSelectionChange($event)">
           <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
         </ion-select>
-        <ion-select *ngIf="MovementType===3" label="Cuenta Destino" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
+        <ion-select *ngIf="MovementType===3" label="Cuenta Destino" interface="action-sheet" label-placement="floating" placeholder="Seleccionar" formControlName="destinationWallet">
           <ion-select-option *ngFor="let wallet of destwallets" [value]="wallet.id">{{wallet.description}} | {{wallet.balance|currency}}</ion-select-option>
         </ion-select>
         <ion-select *ngIf="MovementType!==3" label="Repetir mensualmente" label-placement="floating" placeholder="No" formControlName="reps">
@@ -179,16 +179,23 @@
   </ion-modal>
  
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="success">
-      <ion-icon name="add" style="color: #EFEBDD !important;"></ion-icon>
+    <ion-fab-button style="--background: #4CA49C !important;">
+      <ion-icon name="add" style="color: #EFEBDD !important; font-size: 10vw;"></ion-icon>
     </ion-fab-button>
   <ion-fab-list side="top">
-    <ion-fab-button color="success" id="open-modal-new">
+    <ion-fab-button style="--background: #4CA49C !important;" id="open-modal-new">
       <ion-icon name="add-outline" id="plus" style="color: #EFEBDD !important; font-size: 7vw;"></ion-icon>
     </ion-fab-button>
-      <ion-fab-button color="success" id="open-modal-scheduled">
+      <ion-fab-button style="--background: #4CA49C !important;" id="open-modal-scheduled">
         <ion-icon name="time-outline" id="plus" style="color: #EFEBDD !important; font-size: 7vw;"></ion-icon>
       </ion-fab-button>
   </ion-fab-list> 
   </ion-fab>
+  <ion-toast
+    [isOpen]="alertError"
+    [message]="errorMsg"
+    [duration]="2000"
+    (didDismiss)="alertErrorOpen(false)"
+    color="danger"
+  ></ion-toast>
 </ion-content>

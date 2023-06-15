@@ -7,13 +7,14 @@ import { JwtDto } from '../interfaces/JwtDto';
 import { Category } from '../interfaces/CategoryInterface';
 import { User } from '../interfaces/UserInterface';
 import { Wallet } from '../interfaces/WalletInterface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  authURL='http://localhost:8080/api/auth/'
+  authURL=environment.backendLink+"auth/";
   constructor(private httpClient: HttpClient) { }
 
   public newUser(NewUser:NewUser):Observable<any>{

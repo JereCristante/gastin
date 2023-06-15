@@ -4,9 +4,12 @@
 <ion-content [fullscreen]="true">
 <div id="container">
   <ion-card>
-    <ion-card-title>Bienvenid@ a Gastin!</ion-card-title>
-    <ion-card-subtitle>La manera definitiva de administrar tu plata</ion-card-subtitle>
-  </ion-card><br>
+    <ion-card-title style="color: #EFEBDD;">Bienvenid@ a Gastin!</ion-card-title>
+    <ion-card-subtitle style="color: #4CA49C;">La manera definitiva de administrar tu plata</ion-card-subtitle>
+  </ion-card>
+  <div id="img-container">
+  <img src="assets/icon/Gastin.png" width="200vw" height="200vw"/>
+  </div>
   <ion-card id="Btns">
     <ion-button id="SignUpBtn" expand="block" [routerLink]="'/signup'">Registrate</ion-button><br>
     <ion-button id="LoginBtn" expand="block" fill="outline" [routerLink]="'/login-form'">Inicia sesión</ion-button>

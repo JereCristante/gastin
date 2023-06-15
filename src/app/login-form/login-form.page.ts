@@ -19,6 +19,8 @@ export class LoginFormPage implements OnInit {
   isLoginFail = false;
   loginUser: LoginUser = {email: '',password: ''};
   errMsj: string ='';
+  errorMsg= "Error";
+  alertError: boolean = false;
 
   constructor(public fb:FormBuilder, private router: Router, private tokenService:TokenService, private authService:AuthService) { }
 
@@ -35,8 +37,15 @@ export class LoginFormPage implements OnInit {
       password: new FormControl('', Validators.compose([Validators.required, Validators.minLength(8)]))
     })
   }
+  alertErrorOpen(bool :boolean,msg?:string){
+    if(msg){
+      this.errorMsg=msg;
+    }else{
+      this.errorMsg="Error";
+    }
+    this.alertError=bool;
+  }
   LoginUser(value: any){
-    console.log(value);
     this.loginUser=new LoginUser(value.email,value.password);
 
     this.authService.login(this.loginUser).subscribe(
@@ -52,7 +61,7 @@ export class LoginFormPage implements OnInit {
         // Manejar el error aquí
         
         if(error.status=401){
-          alert('Contraseña o email invalidos');
+          this.alertErrorOpen(true,'Contraseña o email invalidos');
           this.validationFormUser.reset();
         }
         
