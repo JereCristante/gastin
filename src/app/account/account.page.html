@@ -18,10 +18,10 @@
       <ion-input class="input" label="Alias" labelPlacement="floating" [(ngModel)]="alias" *ngIf="user"></ion-input>
     <ion-button class="input-button" [disabled]="!alias" (click)="updateAlias()">Cambiar</ion-button>
   </div>
-  <ion-button id="LoginBtn" expand="block" fill="outline" [routerLink]="'/login-form'">Cambiar contraseña</ion-button>
+  <ion-button id="LoginBtn" expand="block" fill="outline" [routerLink]="''">Cambiar contraseña</ion-button>
   <div style="display: flex; justify-content: center; align-items: center; margin-left: 5vw; margin-right: 5vw; margin-top: 3vh;">
     <ion-input class="input" label="ID Usuario Mayor" labelPlacement="floating" [(ngModel)]="idUpperUser" *ngIf="user"></ion-input>
   <ion-button class="input-button" [disabled]="!idUpperUser && idUpperUser===0" (click)="updateIdUser()">Cambiar</ion-button>
   </div>
-  <ion-button id="LogOutBtn" expand="block" fill="outline" [routerLink]="''">Cerrar Sesion</ion-button>
+  <ion-button id="LogOutBtn" expand="block" fill="outline" [routerLink]="'/login-form'">Cerrar Sesion</ion-button>
 </ion-content>

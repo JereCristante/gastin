@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+  <ion-card *ngIf="dolarBlue" style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Dolar Hoy <ion-label style="color:darkgrey; font-size:x-small;">Actualizado: {{lastUpdate | date:'dd/MM/yyyy HH:mm'}}</ion-label></ion-card-title>
     </ion-card-header>
@@ -30,9 +30,89 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <div>
+    <ion-button id="open-date-filter-from" class="ChangeBtn" fill="outline" style="margin-left: 3vw;">Desde: {{validatorDates.value.from | date: 'dd/MM/yyyy'}} </ion-button>
+    <ion-button id="open-date-filter-to" class="ChangeBtn" fill="outline">Hasta: {{validatorDates.value.to | date: 'dd/MM/yyyy'}}</ion-button>
+  </div>
+  <ion-modal #modal4 trigger="open-date-filter-from" [initialBreakpoint]="1" [breakpoints]="[0,1]">
+    <ng-template>
+      <div class="block">
+      <ion-content id="container">
+        <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+          <ion-title>Filtro de Fecha Desde</ion-title>
+        </ion-header>
+        <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
+          <div style=" display: block; margin-left: auto; margin-right: auto;">
+            <ion-datetime presentation="date" formControlName="from"></ion-datetime>
+          </div> 
+        <ion-toolbar class="toolbar-bottom">
+          <ion-buttons slot="end">
+            <ion-button type="submit"[strong]="true" style="color:#4CA49C;">Guardar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        </form> 
+      </ion-content>
+      </div>
+      </ng-template>
+  </ion-modal>
+  <ion-modal #modal5 trigger="open-date-filter-to" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+      <ng-template>
+        <div class="block">
+        <ion-content id="container">
+          <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+            <ion-title>Filtro de Fecha Hasta</ion-title>
+          </ion-header>
+          <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
+              <div style="display: block; margin-left: auto; margin-right: auto;">
+                    <ion-datetime presentation="date" style="height: 100%; font-size: 5px;" formControlName="to"></ion-datetime>
+              </div>    
+            <ion-toolbar class="toolbar-bottom">
+              <ion-buttons slot="end">
+                <ion-button type="submit"[strong]="true" style="color:#4CA49C;">Guardar</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </form> 
+        </ion-content>
+        </div>
+        </ng-template>
+      </ion-modal>
   <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
     <ion-card-header id="header" style="padding:0; margin:0;">
-      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;"></ion-card-title>
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Gastos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div>
+        <canvas baseChart class="chart"
+        [data]="spentPieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions">
+      </canvas>
+      </div>      
+    </ion-card-content>
+    <ion-card-header id="footer" style="padding:5px; margin:0;">
+      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{-4000| currency}}</label>
+    </ion-card-header>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Ingresos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div>
+        <canvas baseChart class="chart"
+        [data]="incPieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions">
+      </canvas>
+      </div>        
+    </ion-card-content>
+    <ion-card-header id="footer" style="padding:5px; margin:0;">
+      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{6000| currency}}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Ingresos VS Gastos</ion-card-title>
     </ion-card-header>
     <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
       <div>
@@ -40,13 +120,19 @@
         [data]="barChartData"
         [options]="barChartOptions"
         [type]="barChartType"
-        (chartHover)="chartHovered($event)"
         (chartClick)="chartClicked($event)">
         </canvas>
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <ion-card-title style="color: #EFEBDD !important; font-size: 4vh !important;"></ion-card-title>
+      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{2000| currency}}</ion-card-title>
     </ion-card-header>
   </ion-card>
+  <ion-toast
+    [isOpen]="alertError"
+    [message]="errorMsg"
+    [duration]="2000"
+    (didDismiss)="alertErrorOpen(false)"
+    color="danger"
+  ></ion-toast>
 </ion-content>

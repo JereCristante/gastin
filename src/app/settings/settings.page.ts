@@ -66,6 +66,8 @@ export class SettingsPage implements OnInit {
   validatorCategory: FormGroup;
   categoryTypeEdit:number=0;
   validatorCategoryUpdate: FormGroup;
+  errorMsg: string="Error";
+  alertError: boolean=false;
   constructor(public fb:FormBuilder,private uS:UserService, private modalController: ModalController) { 
     this.validatorCategory = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required]))
@@ -84,11 +86,18 @@ export class SettingsPage implements OnInit {
       error => {
         // Manejar el error aquí
           //if(error.status!=200){
-            alert(error.error);
-            console.log(error)
+            this.alertErrorOpen(true,error.error);
           //}
       }
     );
+  }
+  alertErrorOpen(bool :boolean,msg?:string){
+    if(msg){
+      this.errorMsg=msg;
+    }else{
+      this.errorMsg="Error";
+    }
+    this.alertError=bool;
   }
   refreshCategories(){
     this.uS.getCategoriesByUser(this.user!.id!,1).subscribe(
@@ -98,8 +107,7 @@ export class SettingsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }
@@ -111,8 +119,7 @@ export class SettingsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }
@@ -135,7 +142,7 @@ export class SettingsPage implements OnInit {
   newCategory(value:any){
     console.log(this.validatorCategory.value);
     if(this.selectedIcon==""){
-        alert('Debe seleccionar un icono');
+      this.alertErrorOpen(true,'Debe seleccionar un icono');
         return;
     }
     let newCategory: Category = new Category(value.description,this.selectedIcon);
@@ -147,8 +154,7 @@ export class SettingsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }
@@ -156,7 +162,7 @@ export class SettingsPage implements OnInit {
   }
   confirmEditCategory(value:any){
     if(this.selectedIcon==""){
-        alert('Debe seleccionar un icono');
+      this.alertErrorOpen(true,'Debe seleccionar un icono');
         return;
     }
     let updatedCategory: Category = this.editCategory!;
@@ -170,8 +176,7 @@ export class SettingsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }

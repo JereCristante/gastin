@@ -21,6 +21,8 @@ export class WalletsPage implements OnInit {
   validatorWallet!: FormGroup;
   validatorEditWallet!: FormGroup;
   editableWallet!:WalletReport;
+  errorMsg: string="Error";
+  alertError: boolean=false;
   constructor(public fb:FormBuilder,private uS:UserService, private modalController: ModalController) { 
     this.validatorWallet = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
@@ -41,11 +43,18 @@ export class WalletsPage implements OnInit {
       error => {
         // Manejar el error aquí
           //if(error.status!=200){
-            alert(error.error);
-            console.log(error)
+            this.alertErrorOpen(true,error.error);
           //}
       }
     );
+  }
+  alertErrorOpen(bool :boolean,msg?:string){
+    if(msg){
+      this.errorMsg=msg;
+    }else{
+      this.errorMsg="Error";
+    }
+    this.alertError=bool;
   }
   refreshWallets() {
     this.uS.getAccountsByUserWithMovements(this.user!.id!).subscribe(
@@ -59,8 +68,7 @@ export class WalletsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }
@@ -76,9 +84,8 @@ export class WalletsPage implements OnInit {
     this.modalController.dismiss();
   }
   confirmWallet(value:any){
-    console.log(value);
     if(value.balance <0.01){
-      alert('El monto debe ser minimo 1 centavo');
+      this.alertErrorOpen(true,'El monto debe ser minimo 1 centavo');
         return;
     }
 
@@ -92,8 +99,7 @@ export class WalletsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }
@@ -107,7 +113,7 @@ export class WalletsPage implements OnInit {
   }
   editWallet(value:any){
     if(value.balance <0.01){
-      alert('El monto debe ser minimo 1 centavo');
+      this.alertErrorOpen(true,'El monto debe ser minimo 1 centavo');
         return;
     }
 
@@ -121,8 +127,7 @@ export class WalletsPage implements OnInit {
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
-          alert(error.error);
-          console.log(error)
+          this.alertErrorOpen(true,error.error);
         //}
         
       }

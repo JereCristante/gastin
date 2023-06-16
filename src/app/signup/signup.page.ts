@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from '../interfaces/UserInterface';
 import { UserService } from '../Services/user.service';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TokenService } from '../Services/token.service';
 import { AuthService } from '../Services/auth.service';
 import { NewUser } from '../interfaces/newUser';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-signup',
@@ -13,11 +14,12 @@ import { NewUser } from '../interfaces/newUser';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-
+  @ViewChild('modalTermsAndCond') modalTermsAndCond: IonModal | undefined;
   validatorFormUser!: FormGroup;
   passwordsMatching = false;
   newUser: NewUser = {alias: '', email: '',password: ''};
-
+  errorMsg: string="Error";
+  alertError: boolean=false;
 
   constructor(public fb:FormBuilder, private uS:UserService, private router: Router, private tokenService:TokenService, private authService:AuthService) { 
     this.newUser.email='';
@@ -27,7 +29,8 @@ export class SignupPage implements OnInit {
       email: new FormControl('', Validators.compose([Validators.required, Validators.email])),
       alias: new FormControl('', Validators.compose([Validators.required])),
       password: new FormControl('', Validators.compose([Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)])),
-      passwordRep: new FormControl('', Validators.compose([Validators.required]))
+      passwordRep: new FormControl('', Validators.compose([Validators.required])),
+      terms: new FormControl('false', Validators.compose([Validators.required, Validators.requiredTrue]))
     },
     {
       validator: this.ConfirmedValidator('password', 'passwordRep')
@@ -51,7 +54,14 @@ export class SignupPage implements OnInit {
     //}
     //)
   }
-
+alertErrorOpen(bool :boolean,msg?:string){
+    if(msg){
+      this.errorMsg=msg;
+    }else{
+      this.errorMsg="Error";
+    }
+    this.alertError=bool;
+  }
   SignUpUser(value:any){
     this.newUser.email=value.email;
     this.newUser.alias=value.alias;
@@ -66,7 +76,7 @@ export class SignupPage implements OnInit {
           this.router.navigate(['/login-form']);
         }
         if(error.status==400 || error.error=="Ese email ya tiene una cuenta creada"){
-          alert(error.error);
+          this.alertErrorOpen(true,error.error);
         }
       }
     );
@@ -88,5 +98,8 @@ export class SignupPage implements OnInit {
         matchingControl.setErrors(null);
       }
     };
+  }
+  openTermsAndCond(){
+    this.modalTermsAndCond?.present();
   }
 }

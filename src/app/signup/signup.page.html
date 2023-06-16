@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
   <div>
     <ion-card>
-      <ion-card-title id="title">Bienvenid@ a Gastin!</ion-card-title>
+      <ion-card-title id="title" style="color: #EFEBDD;">Bienvenid@ a Gastin!</ion-card-title>
     </ion-card>
     <form (ngSubmit)="SignUpUser(validatorFormUser.value)" [formGroup]="validatorFormUser">
       <ion-input label="Email" type="email" formControlName="email" label-placement="floating" fill="outline"></ion-input>
@@ -11,7 +11,8 @@
       <ion-input label="Alias" formControlName="alias" label-placement="floating" fill="outline"></ion-input>
       <ion-input label="Contraseña"  type="password" formControlName="password" label-placement="floating" fill="outline"></ion-input>
       <div id="passval"><ion-label id="passvallab" color="danger" *ngIf="validatorFormUser.get('password')!.hasError('pattern') && validatorFormUser.touched">Debe tener 8 caracteres, y al menos: <br> Una Mayúscula, Una Minúscula y Un Número</ion-label></div>
-      <ion-input label="Repeti la Contraseña" type="password" formControlName="passwordRep" label-placement="floating" fill="outline"></ion-input>
+      <ion-input label="Repetí la Contraseña" type="password" formControlName="passwordRep" label-placement="floating" fill="outline"></ion-input>
+      <ion-label style="display: flex; align-items: center; font-size: 4vw; margin-top: 2vw; margin-left: 6vw;">Acepto los <a (click)="openTermsAndCond()" style="color: #EFEBDD;"> Términos y Condiciones </a><ion-checkbox formControlName="terms"> </ion-checkbox></ion-label>
       <ion-label color="danger" *ngIf="validatorFormUser.get('passwordRep')!.errors?.['confirmedValidator'] && validatorFormUser.touched">Las Contraseñas deben coincidir</ion-label>
       <ion-card>
         <ion-card-subtitle id="bottom">Ya tengo una cuenta, <a [routerLink]="'/login-form'" style="color:white">quiero ingresar!</a></ion-card-subtitle>
@@ -20,5 +21,22 @@
     </form>
     
   </div>
- 
+  <ion-modal #modalTermsAndCond [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 1]">
+    <ng-template>
+      <div class="block">
+      <ion-content id="container">
+        <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
+        <ion-title>Términos y Condiciones</ion-title>
+        </ion-header>
+      </ion-content>
+    </div>
+    </ng-template>
+  </ion-modal>
+  <ion-toast
+    [isOpen]="alertError"
+    [message]="errorMsg"
+    [duration]="2000"
+    (didDismiss)="alertErrorOpen(false)"
+    color="danger"
+  ></ion-toast>
 </ion-content>

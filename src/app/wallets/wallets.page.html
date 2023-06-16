@@ -94,4 +94,11 @@
   </div>
   </ng-template>
 </ion-modal>
+<ion-toast
+    [isOpen]="alertError"
+    [message]="errorMsg"
+    [duration]="2000"
+    (didDismiss)="alertErrorOpen(false)"
+    color="danger"
+  ></ion-toast>
 </ion-content>
