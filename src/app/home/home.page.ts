@@ -76,7 +76,6 @@ export class HomePage implements OnInit {
         // Manejar el error aquí
           //if(error.status!=200){
             this.alertErrorOpen(true);
-            console.log(error.error);
           //}
       }
     );
@@ -105,14 +104,14 @@ export class HomePage implements OnInit {
     setTimeout(() => {
       this.refreshMovements();
       event.target.complete();
-    }, 2000);
+    }, 4000);
   
   };
   refreshCategories(){
     this.uS.getCategoriesByUser(this.user!.id!,this.MovementType).subscribe(
       data=> {
         this.categories=data;
-        if(this.categories[0].id){
+        if(this.categories !=undefined){
           this.validatorMovement.patchValue({category:this.categories[0].id});
         }
         
@@ -130,13 +129,13 @@ export class HomePage implements OnInit {
   refreshSchedules(){
     this.uS.getSchedulesByUser(this.user!.id!).subscribe(
       data=> {
+        this.activeSchedules=[];
         this.activeSchedules=data;     
       },
       error => {
         // Manejar el error aquí
         //if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         //}
         
       }
@@ -321,14 +320,13 @@ export class HomePage implements OnInit {
          //Manejar el error aquí
         if(error.status!=200){
           this.alertErrorOpen(true);
-          console.log(error)
+        }else{
+          this.closeModal();
         }
-        
       }
     )};
   }
   deleteSchedule(schedule:number){
-    if(this.confirmDelete=='yes'){
     this.uS.deleteSchedule(schedule).subscribe(
       data=> {
         this.refreshSchedules();
@@ -337,11 +335,12 @@ export class HomePage implements OnInit {
          //Manejar el error aquí
         if(error.status!=200){
           this.alertErrorOpen(true);
-          console.log(error)
+        }else{
+          this.refreshSchedules();
         }
         
       }
-    )};
+    );
   }
   onSelectionChange(event: any) {
     const selectedWallet = event.detail.value;

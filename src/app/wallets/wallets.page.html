@@ -4,6 +4,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card style="border-radius: 10px;">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-grid style="margin:0; font-size: 4vh; color: #EFEBDD;">

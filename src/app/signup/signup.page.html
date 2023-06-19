@@ -12,7 +12,7 @@
       <ion-input label="Contraseña"  type="password" formControlName="password" label-placement="floating" fill="outline"></ion-input>
       <div id="passval"><ion-label id="passvallab" color="danger" *ngIf="validatorFormUser.get('password')!.hasError('pattern') && validatorFormUser.touched">Debe tener 8 caracteres, y al menos: <br> Una Mayúscula, Una Minúscula y Un Número</ion-label></div>
       <ion-input label="Repetí la Contraseña" type="password" formControlName="passwordRep" label-placement="floating" fill="outline"></ion-input>
-      <ion-label style="display: flex; align-items: center; font-size: 4vw; margin-top: 2vw; margin-left: 6vw;">Acepto los <a (click)="openTermsAndCond()" style="color: #EFEBDD;"> Términos y Condiciones </a><ion-checkbox formControlName="terms"> </ion-checkbox></ion-label>
+      <ion-label style="display: flex; align-items: center; font-size: 4vw; margin-top: 2vw; margin-left: 6vw;">Acepto los <a (click)="openTermsAndCond()" style="color: #EFEBDD; text-decoration: underline;"> Términos y Condiciones </a><ion-checkbox formControlName="terms"> </ion-checkbox></ion-label>
       <ion-label color="danger" *ngIf="validatorFormUser.get('passwordRep')!.errors?.['confirmedValidator'] && validatorFormUser.touched">Las Contraseñas deben coincidir</ion-label>
       <ion-card>
         <ion-card-subtitle id="bottom">Ya tengo una cuenta, <a [routerLink]="'/login-form'" style="color:white">quiero ingresar!</a></ion-card-subtitle>
@@ -28,6 +28,75 @@
         <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
         <ion-title>Términos y Condiciones</ion-title>
         </ion-header>
+        <ion-item>
+          <ion-label class="ion-text-wrap"><br>
+Bienvenido(a) a la aplicación "Gastin", una herramienta de finanzas personales diseñada para ayudarte a administrar tus gastos de manera eficiente.<br> Antes de utilizar la aplicación, te pedimos que leas y comprendas los siguientes Términos y Condiciones. Al acceder y utilizar la aplicación, aceptas estar legalmente vinculado(a) por estos términos. Si no estás de acuerdo con alguno de los términos, te recomendamos que no utilices la aplicación.
+<br><br>
+<ion-label class="TermsTitle">
+  Uso de la Aplicación:
+</ion-label>
+<br>
+a. La aplicación Gastin está diseñada para el uso personal y no comercial. No puedes utilizarla con fines comerciales, de reventa o distribución sin autorización expresa.<br>
+b. Eres responsable de mantener la confidencialidad de tu información de inicio de sesión y de todas las actividades que ocurran en tu cuenta.
+<br><br>
+<ion-label class="TermsTitle">
+Privacidad:</ion-label><br>
+a. La aplicación Gastin recopila y almacena cierta información personal para ofrecerle servicios personalizados. Esta información se manejará de acuerdo con nuestra Política de Privacidad, que puedes revisar en el apartado correspondiente.
+<br><br>
+<ion-label class="TermsTitle">
+Responsabilidad:</ion-label><br>
+a. La aplicación Gastin se proporciona "tal cual" y no ofrecemos garantías de ningún tipo con respecto a su exactitud, confiabilidad o disponibilidad.<br>
+b. No nos hacemos responsables de cualquier pérdida, daño o inconveniente que pueda surgir debido al uso de la aplicación o a la información proporcionada en ella.<br>
+c. No nos responsabilizamos por el manejo incorrecto o inadecuado de tus finanzas personales a través de la aplicación. Siempre recomendamos que consultes con un profesional financiero antes de tomar decisiones importantes.
+<br><br>
+<ion-label class="TermsTitle">
+Propiedad Intelectual:</ion-label><br>
+a. Todos los derechos de propiedad intelectual relacionados con la aplicación Gastin, incluyendo el diseño, logotipos, gráficos y contenido, son propiedad exclusiva de sus respectivos propietarios.<br>
+b. No puedes utilizar, copiar, modificar o distribuir el contenido de la aplicación sin autorización expresa.
+<br><br>
+<ion-label class="TermsTitle">
+Modificaciones:</ion-label><br>
+Nos reservamos el derecho de modificar, suspender o interrumpir cualquier parte de la aplicación Gastin en cualquier momento, sin previo aviso.
+<br><br>
+<ion-label class="TermsTitle">
+Ley Aplicable:</ion-label><br>
+Estos términos y condiciones se regirán e interpretarán de acuerdo con las leyes de la República Argentina. Cualquier disputa, controversia o reclamo que surja de o en relación con estos términos y condiciones, incluyendo su validez, interpretación, cumplimiento o resolución, estará sujeta a la jurisdicción exclusiva de los tribunales competentes en Argentina.
+<br>
+La utilización de nuestra aplicación de finanzas personales implica el consentimiento expreso y el sometimiento a la jurisdicción de los tribunales argentinos para cualquier asunto relacionado con estos términos y condiciones.
+<br><br>
+<ion-label class="TermsTitle">
+Política de Privacidad:</ion-label><br>
+
+En Gastin, nos comprometemos a proteger y resguardar la privacidad de nuestros usuarios. Esta Política de Privacidad establece cómo recopilamos, utilizamos y protegemos la información personal que nos proporcionas al utilizar nuestra aplicación de finanzas personales.
+<br><br>
+<ion-label class="TermsTitle">
+Recopilación y Uso de Información:</ion-label><br>
+
+Recopilamos información personal como nombre, dirección de correo electrónico y datos financieros con el único propósito de brindar nuestros servicios de manera eficiente y personalizada.<br>
+Utilizamos la información recopilada con fines estadísticos y de análisis para comprender mejor el comportamiento de nuestros usuarios dentro de la aplicación y mejorar la experiencia del usuario.<br>
+No compartimos información personal identificable con terceros sin tu consentimiento previo, excepto cuando sea requerido por ley o en cumplimiento de un proceso legal.
+<br><br>
+<ion-label class="TermsTitle">
+Seguridad de la Información:</ion-label>
+<br>
+Tomamos medidas de seguridad apropiadas para proteger la información personal de nuestros usuarios contra accesos no autorizados, divulgación, alteración o destrucción.<br>
+Utilizamos tecnología de encriptación y seguimos las mejores prácticas de seguridad de la industria para proteger tus datos personales.
+<br><br>
+<ion-label class="TermsTitle">
+Consentimiento:</ion-label>
+<br>
+Al utilizar nuestra aplicación de finanzas personales, estás aceptando y consintiendo el procesamiento de tu información personal de acuerdo con esta Política de Privacidad.
+<br><br>
+<ion-label class="TermsTitle">
+Modificaciones de la <br>Política de Privacidad:</ion-label>
+<br>
+Nos reservamos el derecho de actualizar o modificar esta Política de Privacidad en cualquier momento sin previo aviso.<br>
+Te recomendamos revisar periódicamente esta Política de Privacidad para estar informado sobre cualquier cambio o actualización.<br>
+Si tienes alguna pregunta o inquietud sobre nuestra Política de Privacidad, no dudes en ponerte en contacto con nosotros a través de los canales de soporte indicados en la sección de contacto.
+<br>
+Al utilizar "Gastin", confirmas que has leído, comprendido y aceptado nuestra Política de Privacidad.
+          </ion-label>
+        </ion-item>
       </ion-content>
     </div>
     </ng-template>

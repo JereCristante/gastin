@@ -3,6 +3,8 @@ import { Wallet } from '../interfaces/WalletInterface';
 import { WalletReport } from '../interfaces/WalletReportInterface';
 import { UserService } from '../Services/user.service';
 import { User } from '../interfaces/UserInterface';
+import { TokenService } from '../Services/token.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -13,7 +15,7 @@ export class AccountPage implements OnInit {
   user?:User;
   alias?: string;
   idUpperUser: number=0;
-  constructor(private uS:UserService) { 
+  constructor(private uS:UserService, private tS:TokenService, private router:Router) { 
   }
   ngOnInit() {
     this.refreshUser();
@@ -63,5 +65,18 @@ export class AccountPage implements OnInit {
           //}
       }
     );
+  }
+  logOut(){
+    this.tS.logOut();
+    this.router.navigate(['/login-form']);
+  }
+  
+  openEmailApp() {
+    const email = 'gastinapp@gmail.com';
+    const subject = 'Soporte al Usuario';
+    //const body = 'Contenido del correo';
+    const emailAppUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+    //const emailAppUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(emailAppUrl, '_system');
   }
 }

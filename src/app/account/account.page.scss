@@ -10,7 +10,7 @@ ion-content{
     --ion-background-color: #BABEBE !important;
     --ion-color: #30383A;
 }
-#LoginBtn{
+.LoginBtn{
     --background: #4CA49C !important;
     color: white !important;
     --border-color: #4CA49C;
@@ -56,7 +56,7 @@ ion-content{
     var(--border-bottom-left-radius);
     --border-width:20px !important;
     --border-style: solid !important;
-    height: 7vh;
+    max-height: 7vh;
     --color:#4CA49C !important;
 }
 .input-button{
@@ -64,7 +64,9 @@ ion-content{
     color: white !important;
     --border-color: #4CA49C !important;
     text-transform: none;
-    height: 7vh;
+    min-height: 7vh;
+    margin-top: 0;
+    margin-bottom: 0;
     --border-top-left-radius: 0%;
     --border-top-right-radius: 10px;
     --border-bottom-left-radius: 0%;

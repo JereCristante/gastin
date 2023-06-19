@@ -6,6 +6,9 @@ import { NewMovement } from '../interfaces/NewMovement';
 import { Movement } from '../interfaces/MovementInterface';
 import { DateMovs } from '../interfaces/MovementListInterface';
 import { environment } from 'src/environments/environment';
+import { DateFilter } from '../interfaces/DatesFilterInterface';
+import { CategoryTotal } from '../interfaces/CategoryTotalInterface';
+import { CategoryTotalUser } from '../interfaces/CategoryTotalUserInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +28,13 @@ export class MovementService {
   }
   public deleteMovement(movementId:number):Observable<String>{
     return this.http.delete<String>(this.url+'deleteMovement/'+movementId);
+  }
+  public getCategoriesTotalReport(userID:number,type:number,dates:DateFilter): Observable<CategoryTotal[]>{
+    let direccion = this.url +userID+"/"+type+"/movements";
+    return this.http.post<CategoryTotal[]>(direccion,dates);
+  }
+  public getCategoriesTotalReportByUpper(userID:number,dates:DateFilter): Observable<CategoryTotalUser[]>{
+    let direccion = this.url +userID+"/movements";
+    return this.http.post<CategoryTotalUser[]>(direccion,dates);
   }
 }

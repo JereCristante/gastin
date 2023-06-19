@@ -48,6 +48,13 @@ export class WalletsPage implements OnInit {
       }
     );
   }
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.refreshWallets();
+      event.target.complete();
+    }, 4000);
+  
+  };
   alertErrorOpen(bool :boolean,msg?:string){
     if(msg){
       this.errorMsg=msg;
@@ -118,8 +125,8 @@ export class WalletsPage implements OnInit {
     }
 
     let wallet: Wallet ={description: value.description, balance: value.balance, active:true};
-
-    this.uS.newAccount(this.editableWallet.account.id!,wallet).subscribe(
+    console.log(wallet);
+    this.uS.updateAccount(this.editableWallet.account.id!,wallet).subscribe(
       data=> {
         this.validatorWallet.reset();
         this.closeModal();

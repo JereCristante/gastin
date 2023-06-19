@@ -5,6 +5,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngIf="dolarBlue" style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Dolar Hoy <ion-label style="color:darkgrey; font-size:x-small;">Actualizado: {{lastUpdate | date:'dd/MM/yyyy HH:mm'}}</ion-label></ion-card-title>
@@ -30,11 +33,16 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD; text-align: center;">Reportes</ion-card-title>
+    </ion-card-header>
+  </ion-card>
   <div>
     <ion-button id="open-date-filter-from" class="ChangeBtn" fill="outline" style="margin-left: 3vw;">Desde: {{validatorDates.value.from | date: 'dd/MM/yyyy'}} </ion-button>
     <ion-button id="open-date-filter-to" class="ChangeBtn" fill="outline">Hasta: {{validatorDates.value.to | date: 'dd/MM/yyyy'}}</ion-button>
   </div>
-  <ion-modal #modal4 trigger="open-date-filter-from" [initialBreakpoint]="1" [breakpoints]="[0,1]">
+  <ion-modal #modal4 trigger="open-date-filter-from" [initialBreakpoint]="1" [breakpoints]="[0,1]" >
     <ng-template>
       <div class="block">
       <ion-content id="container">
@@ -43,19 +51,19 @@
         </ion-header>
         <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
           <div style=" display: block; margin-left: auto; margin-right: auto;">
-            <ion-datetime presentation="date" formControlName="from"></ion-datetime>
+            <ion-datetime presentation="date" formControlName="from" (ionChange)="saveDates()" [max]="validatorDates.value.to"></ion-datetime>
           </div> 
-        <ion-toolbar class="toolbar-bottom">
+        <!-- <ion-toolbar class="toolbar-bottom">
           <ion-buttons slot="end">
             <ion-button type="submit"[strong]="true" style="color:#4CA49C;">Guardar</ion-button>
           </ion-buttons>
-        </ion-toolbar>
+        </ion-toolbar> -->
         </form> 
       </ion-content>
       </div>
       </ng-template>
   </ion-modal>
-  <ion-modal #modal5 trigger="open-date-filter-to" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+  <ion-modal #modal5 trigger="open-date-filter-to" [initialBreakpoint]="1" [breakpoints]="[0, 1]" *ngIf="validatorDates.value.from">
       <ng-template>
         <div class="block">
         <ion-content id="container">
@@ -64,68 +72,80 @@
           </ion-header>
           <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
               <div style="display: block; margin-left: auto; margin-right: auto;">
-                    <ion-datetime presentation="date" style="height: 100%; font-size: 5px;" formControlName="to"></ion-datetime>
+                    <ion-datetime presentation="date" style="height: 100%; font-size: 5px;" (ionChange)="saveDates()" formControlName="to" [min]="validatorDates.value.from"></ion-datetime>
               </div>    
-            <ion-toolbar class="toolbar-bottom">
-              <ion-buttons slot="end">
-                <ion-button type="submit"[strong]="true" style="color:#4CA49C;">Guardar</ion-button>
-              </ion-buttons>
-            </ion-toolbar>
           </form> 
         </ion-content>
         </div>
         </ng-template>
       </ion-modal>
-  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="spentCategoriesTotal">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Gastos</ion-card-title>
     </ion-card-header>
     <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
-      <div>
+      <div *ngIf="spentPieChartData">
         <canvas baseChart class="chart"
         [data]="spentPieChartData"
         [type]="pieChartType"
-        [options]="pieChartOptions">
+        [options]="pieChartOptions" >
       </canvas>
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{-4000| currency}}</label>
+      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{spentTotal| currency}}</label>
     </ion-card-header>
   </ion-card>
-  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="incomeCategoriesTotal">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Ingresos</ion-card-title>
     </ion-card-header>
     <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
-      <div>
+      <div *ngIf="incPieChartData">
         <canvas baseChart class="chart"
         [data]="incPieChartData"
         [type]="pieChartType"
-        [options]="pieChartOptions">
+        [options]="pieChartOptions" >
       </canvas>
       </div>        
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{6000| currency}}</ion-card-title>
+      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{incomeTotal| currency}}</ion-card-title>
     </ion-card-header>
   </ion-card>
-  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;">
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="incomeTotal || spentTotal">
     <ion-card-header id="header" style="padding:0; margin:0;">
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Ingresos VS Gastos</ion-card-title>
     </ion-card-header>
     <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
-      <div>
+      <div *ngIf="barChartData">
         <canvas baseChart class="chart"
         [data]="barChartData"
         [options]="barChartOptions"
         [type]="barChartType"
-        (chartClick)="chartClicked($event)">
+        >
         </canvas>
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{2000| currency}}</ion-card-title>
+      <ion-card-title style=" font-size: 4vh !important;" [ngStyle]="{'color':incomeTotal+spentTotal>=0 ? '#3FC53C' : '#D11F1F'}">{{incomeTotal+spentTotal| currency}}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngFor="let user of userSpentCategoriesTotal; let indexOfelement=index">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD;">Gastos de {{user.userName | titlecase}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div *ngIf="spentPieChartDataUsers[indexOfelement]">
+        <canvas baseChart class="chart"
+        [data]="spentPieChartDataUsers[indexOfelement]"
+        [type]="pieChartType"
+        [options]="pieChartOptions">
+      </canvas>
+      </div>      
+    </ion-card-content>
+    <ion-card-header id="footer" style="padding:5px; margin:0;">
+      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{user.total| currency}}</label>
     </ion-card-header>
   </ion-card>
   <ion-toast

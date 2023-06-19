@@ -53,7 +53,7 @@ export class UserService {
   }
   updateAccount(id:number,wallet:Wallet): Observable<Wallet>{
     let direccion = this.url +"accounts/"+id+"/accounts";
-    return this.http.post<Wallet>(direccion,wallet);
+    return this.http.put<Wallet>(direccion,wallet);
   }
   updateUser(id:number,user:User):Observable<User>{
     let direccion = this.url +"users/"+id;
