@@ -54,7 +54,6 @@ export class LoginFormPage implements OnInit {
         this.isLoginFail=false;
         this.tokenService.setToken(data.token);
         this.tokenService.setEmail(data.email);
-        console.log( data + " logueado");
         this.router.navigate(['/gastin/home']);
       },
       error => {

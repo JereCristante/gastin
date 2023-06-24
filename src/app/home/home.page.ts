@@ -120,7 +120,6 @@ export class HomePage implements OnInit {
         // Manejar el error aquí
         //if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         //}
         
       }
@@ -152,7 +151,6 @@ export class HomePage implements OnInit {
         // Manejar el error aquí
         //if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         //}
         
       }
@@ -167,14 +165,12 @@ export class HomePage implements OnInit {
         // Manejar el error aquí
         //if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         //}
         
       }
     );
   }
   confirmMovement(value:any){
-    console.log(value);
     if(value.amount <0.01){
       this.alertErrorOpen(true,'El monto debe ser minimo 1 centavo');
         return;
@@ -192,8 +188,6 @@ export class HomePage implements OnInit {
     }
 
     let movimiento = new NewMovement(value.description,value.amount,value.date,true);
-    console.log(value.date);
-    console.log(movimiento);
     //if(value.destinationWallet==''){
       //value.destinationWallet=0;
     //}
@@ -202,7 +196,6 @@ export class HomePage implements OnInit {
         if(value.reps!=0){
           let day = new Date((value.date)).getUTCDate();
           let schedule = new newSchedule(day,value.reps,1,true,data.id);
-          console.log(schedule);
           this.uS.newSchedule(schedule).subscribe(
             data=> {
               this.refreshSchedules();
@@ -213,7 +206,6 @@ export class HomePage implements OnInit {
                //Manejar el error aquí
               if(error.status!=200){
                 this.alertErrorOpen(true);
-                console.log(error)
               }
               
             }
@@ -227,7 +219,6 @@ export class HomePage implements OnInit {
         // Manejar el error aquí
         //if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         //}
         
       }
@@ -251,7 +242,6 @@ export class HomePage implements OnInit {
     }
   }
   editMovement(movement:Movement){
-    console.log(movement);
     this.editableMovement=movement;
     this.validatorEditMovement.patchValue({description:movement.description});
     if(movement.movementType==1){
@@ -268,7 +258,6 @@ export class HomePage implements OnInit {
     
   }
   confirmEditMovement(value:any){
-    console.log(value);
     let updatedMovement = new NewMovement(value.description,value.amount,value.date,true);
     if(value.category==undefined){
       value.category=0;
@@ -288,7 +277,6 @@ export class HomePage implements OnInit {
          //Manejar el error aquí
         if(error.status!=302){
           this.alertErrorOpen(true);
-          console.log(error)
         }
         
       }

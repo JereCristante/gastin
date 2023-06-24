@@ -8,6 +8,7 @@ import { WalletReport } from '../interfaces/WalletReportInterface';
 import { Schedule } from '../interfaces/ScheduleInterface';
 import { newSchedule } from '../interfaces/newScheduleInterface';
 import { environment } from 'src/environments/environment';
+import { Report } from '../interfaces/ReportInterface';
 @Injectable({
   providedIn: 'root'
 })
@@ -66,5 +67,9 @@ export class UserService {
   newSchedule(schedule:newSchedule):Observable<Schedule>{
     let direccion = this.url +"schedules/new";
     return this.http.post<Schedule>(direccion,schedule);
+  }
+  newReport(newreport:Report, userid:number):Observable<Report>{
+    let direccion = this.url +"reports/"+userid;
+    return this.http.post<Report>(direccion,newreport);
   }
 }

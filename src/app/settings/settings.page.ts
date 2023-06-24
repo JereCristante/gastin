@@ -140,7 +140,6 @@ export class SettingsPage implements OnInit {
     this.modalController.dismiss();
   }
   newCategory(value:any){
-    console.log(this.validatorCategory.value);
     if(this.selectedIcon==""){
       this.alertErrorOpen(true,'Debe seleccionar un icono');
         return;
@@ -183,7 +182,6 @@ export class SettingsPage implements OnInit {
     );
   }
   EditCategory(category:Category, type:number){
-    console.log(category);
     this.editCategory=category;
     this.selectedIcon=category.icon;
     this.categoryTypeEdit=type;
@@ -201,7 +199,6 @@ export class SettingsPage implements OnInit {
 
   }
   typeChanged(value:any){
-    console.log(value.detail.value);
     if(value.detail.value == 1){
       this.iconColor="#D11F1F";
       this.selectedType=1;

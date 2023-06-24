@@ -125,7 +125,6 @@ export class WalletsPage implements OnInit {
     }
 
     let wallet: Wallet ={description: value.description, balance: value.balance, active:true};
-    console.log(wallet);
     this.uS.updateAccount(this.editableWallet.account.id!,wallet).subscribe(
       data=> {
         this.validatorWallet.reset();
