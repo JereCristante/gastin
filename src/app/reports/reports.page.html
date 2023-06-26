@@ -22,13 +22,13 @@
         </ion-row>
         <ion-row>
           <ion-col>Blue</ion-col>
-          <ion-col style="color:#4CA49C;">{{dolarBlue.value_buy | currency}}</ion-col>
-          <ion-col style="color:#4CA49C;">{{dolarBlue.value_sell | currency}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarBlue.value_buy | currency:'ARS'}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarBlue.value_sell | currency:'ARS'}}</ion-col>
         </ion-row>
         <ion-row>
           <ion-col>Oficial</ion-col>
-          <ion-col style="color:#4CA49C;">{{dolarOficial.value_buy | currency}}</ion-col>
-          <ion-col style="color:#4CA49C;">{{dolarOficial.value_sell | currency}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarOficial.value_buy | currency:'ARS'}}</ion-col>
+          <ion-col style="color:#4CA49C;">{{dolarOficial.value_sell | currency:'ARS'}}</ion-col>
         </ion-row>
       </ion-grid>
     </ion-card-content>
@@ -93,7 +93,7 @@
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{spentTotal| currency}}</label>
+      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{spentTotal| currency:'ARS'}}</label>
     </ion-card-header>
   </ion-card>
   <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="incomeCategoriesTotal">
@@ -110,7 +110,7 @@
       </div>        
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{incomeTotal| currency}}</ion-card-title>
+      <ion-card-title style="color: #4CA49C !important; font-size: 4vh !important;">+{{incomeTotal| currency:'ARS'}}</ion-card-title>
     </ion-card-header>
   </ion-card>
   <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="incomeTotal || spentTotal">
@@ -128,7 +128,7 @@
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <ion-card-title style=" font-size: 4vh !important;" [ngStyle]="{'color':incomeTotal+spentTotal>=0 ? '#3FC53C' : '#D11F1F'}">{{incomeTotal+spentTotal| currency}}</ion-card-title>
+      <ion-card-title style=" font-size: 4vh !important;" [ngStyle]="{'color':incomeTotal+spentTotal>=0 ? '#3FC53C' : '#D11F1F'}">{{incomeTotal+spentTotal| currency:'ARS'}}</ion-card-title>
     </ion-card-header>
   </ion-card>
   <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngFor="let user of userSpentCategoriesTotal; let indexOfelement=index">
@@ -145,7 +145,7 @@
       </div>      
     </ion-card-content>
     <ion-card-header id="footer" style="padding:5px; margin:0;">
-      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{user.total| currency}}</label>
+      <label style="color: #D11F1F !important; font-size: 4vh !important;">{{user.total| currency:'ARS'}}</label>
     </ion-card-header>
   </ion-card>
   <ion-toast

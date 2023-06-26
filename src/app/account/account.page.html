@@ -18,12 +18,12 @@
       <ion-input class="input" label="Alias" labelPlacement="floating" [(ngModel)]="alias" *ngIf="user"></ion-input>
     <ion-button class="input-button" [disabled]="!alias" (click)="updateAlias()">Cambiar</ion-button>
   </div>
-  <ion-button class="LoginBtn" expand="block" fill="outline" [routerLink]="''">Cambiar contraseña</ion-button>
+  <!-- <ion-button class="LoginBtn" expand="block" fill="outline" [routerLink]="''">Cambiar contraseña</ion-button> -->
   <div style="display: flex; justify-content: center; align-items: center; margin-left: 5vw; margin-right: 5vw; margin-top: 3vh;">
     <ion-input class="input" label="ID Usuario Mayor" labelPlacement="floating" [(ngModel)]="idUpperUser" *ngIf="user"></ion-input>
   <ion-button class="input-button" [disabled]="!idUpperUser && idUpperUser===0" (click)="updateIdUser()">Cambiar</ion-button>
   </div>
-  <ion-button id="LogOutBtn" expand="block" fill="outline" (click)="logOut()">Cerrar Sesion</ion-button>
+  <ion-button id="LogOutBtn" expand="block" fill="outline" (click)="logOut()">Cerrar Sesión</ion-button>
   <ion-button id="open-modal-info" class="LoginBtn" expand="block" fill="outline">Información</ion-button>
   <ion-modal #modal7 trigger="open-modal-info" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7,1]">
     <ng-template>
@@ -34,31 +34,31 @@
         <ion-accordion-group expand="inset">
           <ion-accordion value="first">
             <ion-item slot="header" color="dark">
-              <ion-label>Para que sirve el boton +?</ion-label>
+              <ion-label>Para que sirve el botón +?</ion-label>
             </ion-item>
-            <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">El boton con el simbolo + sirve para agregar un nuevo registro segun en que pantalla este ubicado, por ejemplo desde la pantalla de billeteras, te permite crear una nueva, o desde la pantalla principal, te permite cargar un nuevo movimiento!</ion-label></div>
+            <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">El botón con el símbolo + sirve para agregar un nuevo registro según en que pantalla esté ubicado, por ejemplo desde la pantalla de billeteras, te permite crear una nueva, o desde la pantalla principal, te permite cargar un nuevo movimiento!</ion-label></div>
           </ion-accordion>
           <ion-accordion value="second">
             <ion-item slot="header" color="dark">
-              <ion-label class="ion-text-wrap">Como edito/elimino un Movimiento?</ion-label>
+              <ion-label class="ion-text-wrap">Cómo edito/elimino un Movimiento?</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap" >En la pantalla principal, encontraras todos los movimientos, simplemente clickea el que desees editar y cuando termines de modificarlo, dale al boton modificar! Si quieres eliminarlo, dale al boton eliminar</ion-label></div>
           </ion-accordion>
           <ion-accordion value="third">
             <ion-item slot="header" color="dark">
-              <ion-label>Como edito una billetera?</ion-label>
+              <ion-label>Cómo edito una billetera?</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap" >En la pantalla de billeteras, encontraras todas las billeteras con su saldo y sus ultimos 3 movimientos, simplemente clickea la que desees editar y cuando termines de modificarla, dale al boton modificar!</ion-label></div>
           </ion-accordion>
           <ion-accordion value="forth">
             <ion-item slot="header" color="dark">
-              <ion-label>Como funcionan los reportes?</ion-label>
+              <ion-label>Cómo funcionan los reportes?</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">En la pantalla de reportes, encontraras reportes tales como: <br> El precio del Dolar <br> Los gastos divididos por categorias <br> Los ingresos divididos por categoria <br> La comparacion entre los ingresos y los gastos <br> Los gastos de otros usuarios (de tener tu id como usuario mayor en otra cuenta) <br> Podes modificar el plazo de los mismos clickeando en los botones Desde o Hasta</ion-label></div>
           </ion-accordion>
           <ion-accordion value="fifth">
             <ion-item slot="header" color="dark">
-              <ion-label>Que es un Usuario Mayor?</ion-label>
+              <ion-label>Qué es un Usuario Mayor?</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">Un usuario mayor, es otro usuario de la aplicacion, a la que le puedes otorgar acceso al reporte de tus Gastos divididos por categoria. <br> Esto para quienes quieran el control de otra persona sobre sus gastos. <br> Para que esto suceda, debes actualizar el campo idUsuarioMayor con el ID del otro usuario. Esto lo podras cambiar cuando quieras, y puedes deshabilitarlo colocando un 0. <br> Un usuario mayor, puede visualizar, desde la pantalla de reportes, los gastos de todos los usuarios que posean su ID.</ion-label></div>
           </ion-accordion>
@@ -70,21 +70,21 @@
           </ion-accordion>
           <ion-accordion value="seventh">
             <ion-item slot="header" color="dark">
-              <ion-label class="ion-text-wrap">Que version de la aplicacion tengo?</ion-label>
+              <ion-label class="ion-text-wrap">Qué versión de la aplicación tengo?</ion-label>
             </ion-item>
-            <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">Tienes la version Beta 0.1</ion-label></div>
+            <div class="ion-padding" slot="content" style="background-color:#30383A"><ion-label class="ion-text-wrap">Tienes la versión Beta 0.1</ion-label></div>
           </ion-accordion>
           <ion-accordion value="eighth">
             <ion-item slot="header" color="dark">
-              <ion-label class="ion-text-wrap">Quiero reportar un error/sugerencia</ion-label>
+              <ion-label class="ion-text-wrap">Quiero reportar un error/sugerencia!</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content" style="background-color:#30383A">
               <form (ngSubmit)="confirmReport(validatorReport.value)" [formGroup]="validatorReport">
                 <ion-textarea label="Observación" labelPlacement="floating" placeholder="Describe tu observación" formControlName="observation"></ion-textarea>
-                <ion-select label="Tipo" label-placement="floating" interface="action-sheet" placeholder="Seleccionar" formControlName="type">
+                <ion-select label="Tipo" cancel-text="Cancelar" label-placement="floating" interface="action-sheet" placeholder="Seleccionar" formControlName="type">
                   <ion-select-option *ngFor="let type of types" [value]="type">{{type}}</ion-select-option>
                 </ion-select>
-                <ion-select label="Pantalla" interface="action-sheet" label-placement="floating" placeholder="Seleccionar" formControlName="screen">
+                <ion-select label="Pantalla" cancel-text="Cancelar" interface="action-sheet" label-placement="floating" placeholder="Seleccionar" formControlName="screen">
                   <ion-select-option *ngFor="let screen of screens" [value]="screen">{{screen}}</ion-select-option>
                 </ion-select>
                 <ion-button type="submit" id="LogOutBtn" [disabled]="!validatorReport.valid" expand="block" fill="outline">Enviar</ion-button>

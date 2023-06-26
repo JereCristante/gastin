@@ -15,7 +15,7 @@
             Total:
           </ion-col>
           <ion-col size="6" style="text-align: end;">
-            {{Capital | currency}}
+            {{Capital | currency:'ARS'}}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -35,7 +35,7 @@
               {{movement.description | titlecase}}
             </ion-col>
             <ion-col size="5" style="text-align: end; font-size: 2.5vh; font-weight: bold;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">
-              {{movement.amount | currency}}
+              {{movement.amount | currency:'ARS'}}
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -43,7 +43,7 @@
     </ion-list>
   </ion-card-content>
   <ion-card-header id="footer" style="padding:5px; margin:0;">
-    <ion-card-title style="color: #EFEBDD !important; font-size: 4vh !important;">{{wallet.account.balance | currency}}</ion-card-title>
+    <ion-card-title style="color: #EFEBDD !important; font-size: 4vh !important;">{{wallet.account.balance | currency:'ARS'}}</ion-card-title>
   </ion-card-header>
 </ion-card>
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">

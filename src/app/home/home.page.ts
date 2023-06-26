@@ -92,6 +92,7 @@ export class HomePage implements OnInit {
     this.refreshWallets();
     this.refreshCategories();
     this.validatorMovement.reset();
+    this.validatorEditMovement.reset();
     this.refreshMovements();
     this.modalController.dismiss();
   }

@@ -11,7 +11,7 @@
       <form [formGroup]="validationFormUser" (ngSubmit)="LoginUser(validationFormUser.value)">
       <ion-input label="Email" name="email" formControlName="email" label-placement="floating" fill="outline" required></ion-input>
       <ion-input label="Contraseña" type="password" formControlName="password" name="password" label-placement="floating" fill="outline" required></ion-input>
-      <ion-card-subtitle id="forgotLink"><a [routerLink]="'/forgotpassword'" style="color:white">Me olvide la Contraseña!</a></ion-card-subtitle>
+      <!-- <ion-card-subtitle id="forgotLink"><a [routerLink]="'/forgotpassword'" style="color:white">Me olvide la Contraseña!</a></ion-card-subtitle> -->
       
       <ion-card>
         <ion-card-subtitle id="signUpLink">No tengo una cuenta, <a [routerLink]="'/signup'" style="color:white">quiero registrarme!</a></ion-card-subtitle>
