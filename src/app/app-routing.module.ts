@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { UserGuardGuard } from './Services/Guards/user-guard.guard';
 
 const routes: Routes = [
   {
     path: 'gastin',
+    canActivate: [UserGuardGuard],
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   // {
