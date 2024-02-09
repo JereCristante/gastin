@@ -1,9 +1,9 @@
 ion-input{
     --background: #D9D9D9;
     --color: #4CA49C;
-    margin: 10px;
-    margin-right: 100px;
-    width: 95%;
+    margin-top: 1vh;
+    //margin-right: 100px;
+    //width: 95%;
     --border-color:#4CA49C;
     --border-radius:8px !important;
     margin-bottom: 0;
@@ -36,6 +36,7 @@ ion-label{
     --color: white;
     --border-radius:8px !important;
     --box-shadow: 0 0px 0px 0 rgb(0, 0, 0, 0.25);
+    margin-top: 0;
 }
 #title{
     text-align: center;
@@ -43,9 +44,12 @@ ion-label{
     margin-bottom: 3vh;
 }
 #bottom{
-    margin-top: 13vh;
-    margin-left: 12px;
-    font-size: 4vw;
+    //margin-top: 13vh;
+    //margin-left: 12px;
+    font-size: 3vw;
+    margin-left: 3vw;
+    margin-bottom: 0.5vh;
+    text-transform: none;
 }
 .block {
     width: 100%;
@@ -62,5 +66,6 @@ ion-label a {
     margin-right: 1vw;
   }
 .TermsTitle{
-    font-size: 5vw;
+    font-size: 3vw;
+    text-transform: none;
 }

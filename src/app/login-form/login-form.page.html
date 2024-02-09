@@ -8,12 +8,15 @@
       <ion-card id="title">
         <ion-card-title style="color:white">Bienvenid@ a Gastin!</ion-card-title>
       </ion-card>
+      
       <form [formGroup]="validationFormUser" (ngSubmit)="LoginUser(validationFormUser.value)">
+      <ion-card>
       <ion-input label="Email" name="email" formControlName="email" label-placement="floating" fill="outline" required></ion-input>
       <ion-input label="Contraseña" type="password" formControlName="password" name="password" label-placement="floating" fill="outline" required></ion-input>
+      </ion-card>
       <!-- <ion-card-subtitle id="forgotLink"><a [routerLink]="'/forgotpassword'" style="color:white">Me olvide la Contraseña!</a></ion-card-subtitle> -->
       
-      <ion-card>
+      <ion-card style="margin-top: 40vh;">
         <ion-card-subtitle id="signUpLink">No tengo una cuenta, <a [routerLink]="'/signup'" style="color:white">quiero registrarme!</a></ion-card-subtitle>
         <ion-button type="submit" expand="block" id="LoginBtn" [disabled]="!validationFormUser.valid">Ingresar</ion-button>
       </ion-card>

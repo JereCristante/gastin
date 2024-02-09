@@ -50,11 +50,15 @@ export class LoginFormPage implements OnInit {
 
     this.authService.login(this.loginUser).subscribe(
       data=> {
-        this.isLogged=true;
-        this.isLoginFail=false;
         this.tokenService.setToken(data.token);
         this.tokenService.setEmail(data.email);
-        this.router.navigate(['/gastin/home']);
+        this.tokenService.setRole(data.rol);
+        this.tokenService.setId(data.id);
+        this.isLogged=true;
+        this.isLoginFail=false;
+        setTimeout(() => {
+          this.router.navigate(['/gastin/home']);
+        }, 2000);
       },
       error => {
         // Manejar el error aquí

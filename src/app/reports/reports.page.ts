@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { DolarService } from '../Services/dolar.service';
 import { coin } from '../interfaces/DolarInterface';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import { ChartConfiguration, ChartData, ChartEvent, ChartOptions, ChartType } from 'chart.js';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CategoryTotal } from '../interfaces/CategoryTotalInterface';
@@ -10,6 +10,12 @@ import { MovementService } from '../Services/movement.service';
 import { UserService } from '../Services/user.service';
 import { User } from '../interfaces/UserInterface';
 import { CategoryTotalUser } from '../interfaces/CategoryTotalUserInterface';
+import { TokenService } from '../Services/token.service';
+import { MetricsService } from '../Services/metrics.service';
+import { TransactionsByDay } from '../interfaces/TransactionsByDayInterface';
+import { PendingReport } from '../interfaces/PendingReport';
+import { NewUsersByMonth } from '../interfaces/NewUsersByMonth';
+import { ChartDataset } from 'chart.js';
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.page.html',
@@ -35,9 +41,33 @@ export class ReportsPage implements OnInit {
   public spentPieChartData!: ChartData<'pie', number[], string | string[]>;
   public incPieChartData!: ChartData<'pie', number[], string | string[]>;
   public barChartData!: ChartData<'bar'>;
+  public barChartTransactionsData!: ChartData<'bar'>;
   userSpentCategoriesTotal!: CategoryTotalUser[];
   public spentPieChartDataUsers: ChartData<'pie', number[], string | string[]>[]= [];
-  constructor(private dS:DolarService, private fb:FormBuilder, private modalController: ModalController, private Ms:MovementService, private uS:UserService) {
+  pendingReports: PendingReport[]=[];
+  public lineChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        ticks: { color: '#4CA49C' },
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: '#4CA49C' },
+      }
+    },
+  };
+  public lineChartType: ChartType = 'line';
+  public lineChartLegend = true;
+  public lineChartUsersLabels: String[] = [];
+  public lineChartUsersData: ChartDataset[] = [
+    { data: [], label: 'Usuarios Nuevos Registrados',borderColor: '#4CA49C'},
+  ];
+  public lineChartTransactionsLabels: String[] = [];
+  public lineChartTransactionsData: ChartDataset[] = [
+    { data: [], label: 'Transacciones Realizadas',borderColor: '#4CA49C'},
+  ];
+  constructor(private dS:DolarService, private fb:FormBuilder, private modalController: ModalController, private Ms:MovementService, private uS:UserService, public tS:TokenService,private metS:MetricsService) {
     this.validatorDates = this.fb.group({
       from: new FormControl(this.utcDateLast.toISOString(), Validators.compose([Validators.required])),
       to: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required]))
@@ -131,11 +161,9 @@ export class ReportsPage implements OnInit {
     );
     this.Ms.getCategoriesTotalReportByUpper(this.user!.id!,{dateFrom:this.validatorDates.value.from,dateTo:this.validatorDates.value.to}).subscribe(
       data=> {
-        console.log(data);
         this.spentPieChartDataUsers = [];
         this.userSpentCategoriesTotal=data;
         data.forEach(user => {
-          console.log(user)
           let userPieChartData: ChartData<'pie', number[], string | string[]> = {
             labels: 
             user.categories.map(category => category.description)
@@ -155,9 +183,28 @@ export class ReportsPage implements OnInit {
         
       }
     );
+     if (this.tS.getRole()=="ADMIN"){
+      this.metS.getTransactionsByDay().subscribe({
+        next:(response:TransactionsByDay[])=>{
+          this.lineChartTransactionsLabels = response.map(item => item.date);
+          this.lineChartTransactionsData[0].data = response.map(item => item.amount);
+        }
+      });
+      this.metS.getNewUsersByMonth().subscribe({
+        next:(response:NewUsersByMonth[])=>{
+          this.lineChartUsersLabels = response.map(item => item.date);
+          this.lineChartUsersData[0].data = response.map(item => item.amount);
+        }
+      });
+      this.metS.getReportsByUser().subscribe({
+        next:(response:PendingReport[])=>{
+          this.pendingReports=response;
+        }
+      });
+     }
   }
+  
   saveDates(){
-    console.log("search");
     this.refreshReports();
     this.modalController.dismiss();
   }
@@ -197,7 +244,6 @@ export class ReportsPage implements OnInit {
   public pieChartType: ChartType = 'pie';
   // events
   //public chartClicked({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
-    //console.log(event, active);
  // }
 
 }

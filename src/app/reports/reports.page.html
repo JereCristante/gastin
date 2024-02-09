@@ -38,20 +38,20 @@
       <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD; text-align: center;">Reportes</ion-card-title>
     </ion-card-header>
   </ion-card>
-  <div>
-    <ion-button id="open-date-filter-from" class="ChangeBtn" fill="outline" style="margin-left: 3vw;">Desde: {{validatorDates.value.from | date: 'dd/MM/yyyy'}} </ion-button>
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <ion-button id="open-date-filter-from" class="ChangeBtn" fill="outline">Desde: {{validatorDates.value.from | date: 'dd/MM/yyyy'}} </ion-button>
     <ion-button id="open-date-filter-to" class="ChangeBtn" fill="outline">Hasta: {{validatorDates.value.to | date: 'dd/MM/yyyy'}}</ion-button>
   </div>
   <ion-modal #modal4 trigger="open-date-filter-from" [initialBreakpoint]="1" [breakpoints]="[0,1]" >
     <ng-template>
       <div class="block">
-      <ion-content id="container">
+      <ion-content id="container" style="background-color: #30383A;">
         <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
           <ion-title>Filtro de Fecha Desde</ion-title>
         </ion-header>
         <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
-          <div style=" display: block; margin-left: auto; margin-right: auto;">
-            <ion-datetime presentation="date" formControlName="from" (ionChange)="saveDates()" [max]="validatorDates.value.to"></ion-datetime>
+          <div style=" display: block;">
+            <ion-datetime presentation="date" formControlName="from" style="margin-left: 3vh; height: 100%; width: 100%; font-size: 5px;" (ionChange)="saveDates()" [max]="validatorDates.value.to"></ion-datetime>
           </div> 
         <!-- <ion-toolbar class="toolbar-bottom">
           <ion-buttons slot="end">
@@ -66,13 +66,13 @@
   <ion-modal #modal5 trigger="open-date-filter-to" [initialBreakpoint]="1" [breakpoints]="[0, 1]" *ngIf="validatorDates.value.from">
       <ng-template>
         <div class="block">
-        <ion-content id="container">
+        <ion-content id="container" style="background-color: #30383A;">
           <ion-header style="text-align: center; background-color: #30383A; color: #EFEBDD; padding-top: 0.4vh; padding-bottom: 0.4vh;">
             <ion-title>Filtro de Fecha Hasta</ion-title>
           </ion-header>
           <form (ngSubmit)="saveDates()" [formGroup]="validatorDates">
-              <div style="display: block; margin-left: auto; margin-right: auto;">
-                    <ion-datetime presentation="date" style="height: 100%; font-size: 5px;" (ionChange)="saveDates()" formControlName="to" [min]="validatorDates.value.from"></ion-datetime>
+              <div >
+                    <ion-datetime presentation="date" style="margin-left: 3vh; height: 100%; width: 100%; font-size: 5px;" (ionChange)="saveDates()" formControlName="to" [min]="validatorDates.value.from"></ion-datetime>
               </div>    
           </form> 
         </ion-content>
@@ -148,6 +148,71 @@
       <label style="color: #D11F1F !important; font-size: 4vh !important;">{{user.total| currency:'ARS'}}</label>
     </ion-card-header>
   </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="tS.getRole()==='ADMIN'">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 4vh !important; padding: 10px; color: #EFEBDD; text-align: center;">Para Administradores</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="lineChartTransactionsData[0].data.length > 0 && tS.getRole()==='ADMIN'" >
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 3vh !important; padding: 10px; color: #EFEBDD;">Transacciones por día</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div *ngIf="lineChartTransactionsData">
+        <canvas baseChart
+        [datasets]="lineChartTransactionsData"
+        [labels]="lineChartTransactionsLabels"
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+        [type]="lineChartType">
+      </canvas>
+      </div>     
+    </ion-card-content>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="lineChartUsersData[0].data.length > 0 && tS.getRole()==='ADMIN'">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 3vh !important; padding: 10px; color: #EFEBDD;">Usuarios Creados Por Mes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div *ngIf="lineChartUsersData">
+        <canvas baseChart
+        [datasets]="lineChartUsersData"
+        [labels]="lineChartUsersLabels"
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+        [type]="lineChartType">
+      </canvas>
+      </div>      
+    </ion-card-content>
+  </ion-card>
+  <ion-card style="border-radius: 10px; --background:#D9D9D9 !important; margin-top: 6vw;" *ngIf="pendingReports.length>0 && tS.getRole()==='ADMIN'">
+    <ion-card-header id="header" style="padding:0; margin:0;">
+      <ion-card-title style="font-size: 3vh !important; padding: 10px; color: #EFEBDD;">Observaciones de usuarios</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
+      <div *ngIf="pendingReports.length>0">
+        <table>
+          <thead>
+            <tr>
+              <th>Observación</th>
+              <th>Tipo</th>
+              <th>Pantalla</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rep of pendingReports">
+              <td>{{rep.observation | titlecase}}</td>
+              <td>{{rep.type}}</td>
+              <td>{{rep.screen}}</td>
+              <td>{{rep.date | date: 'dd/MM'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>      
+    </ion-card-content>
+  </ion-card>
+
   <ion-toast
     [isOpen]="alertError"
     [message]="errorMsg"

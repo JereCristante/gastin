@@ -103,7 +103,7 @@ export class AccountPage implements OnInit {
     window.open(emailAppUrl, '_system');
   }
   confirmReport(value: any){
-    let newReport = {observation:value.observation,type:value.type,screen:value.screen,state:"Reclamado",date:value.date}
+    let newReport = {observation:value.observation,type:value.type,screen:value.screen,state:"Reclamado",date:value.date,user:this.user!.id!.toString()}
     this.uS.newReport(newReport,this.user!.id!).subscribe(
       data=> {
         this.alertSuccessOpen(true);

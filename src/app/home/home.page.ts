@@ -16,6 +16,7 @@ import { ModalController } from '@ionic/angular';
 import { Schedule } from '../interfaces/ScheduleInterface';
 import { newSchedule } from '../interfaces/newScheduleInterface';
 import { Reps } from '../interfaces/RepsInterface';
+import { TokenService } from '../Services/token.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -28,7 +29,7 @@ export class HomePage implements OnInit {
   categories: Category[]=[];
   wallets: Wallet[]=[];
   destwallets: Wallet[]=[];
-  user?:User;
+  user:User = {id:0,alias:"",email: "",password: "",idUpperUser:0,active:false};
   activeSchedules: Schedule[]=[];
   today = new Date();
   userTimezoneOffset = this.today.getTimezoneOffset(); // Obtén el desplazamiento de la zona horaria del usuario en minutos
@@ -37,18 +38,19 @@ export class HomePage implements OnInit {
   validatorEditMovement!: FormGroup;
   MovementType: number = 1;
   editableMovement!: Movement;
+  editableMovementType: number = 0;
   confirmDelete= '';
   confirmSchedule='';
   repetitions: Reps[] = [{times:3,text:"3 veces"}, {times:6,text:"6 veces"},{times:9,text:"9 veces"},{times:12,text:"12 veces"},{times:18,text:"18 veces"},{times:24,text:"24 veces"},{times:36,text:"36 veces"}]; 
   scheduleAlertHeader="Desea eliminar la programación? Esto no eliminará los movimientos ya realizados";
   alertError= false;
   errorMsg="Error"
-  constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController){
+  constructor(public fb:FormBuilder, private uS:UserService, private mS:MovementService, private modalController: ModalController, private Ts:TokenService){
     
     this.validatorMovement = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
       amount: new FormControl('', Validators.compose([Validators.required])),
-      date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
+      date: new FormControl(this.utcDate.toISOString(),Validators.compose([Validators.required])),
       category: new FormControl('', Validators.compose([Validators.required])),
       wallet: new FormControl('', Validators.compose([Validators.required])),
       destinationWallet: new FormControl(0, Validators.compose([Validators.required])),
@@ -57,20 +59,23 @@ export class HomePage implements OnInit {
     this.validatorEditMovement = this.fb.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.maxLength(18)])),
       amount: new FormControl('', Validators.compose([Validators.required])),
-      date: new FormControl(this.utcDate.toISOString(), Validators.compose([Validators.required])),
+      date: new FormControl(this.utcDate.toISOString()),
       category: new FormControl('', Validators.compose([Validators.required])),
-      wallet: new FormControl('', Validators.compose([Validators.required])),
-      destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
+      wallet: new FormControl('', Validators.compose([Validators.required]))
+      //,
+      //destinationWallet: new FormControl(0, Validators.compose([Validators.required]))
     });
+    this.editableMovementType=0;
   }
   ngOnInit() {
-    this.uS.getUserInfoByEmail(sessionStorage.getItem('AuthEmail')!).subscribe(
+    this.user.id=this.Ts.getId();
+    this.refreshCategories();
+    this.refreshWallets();
+    this.refreshMovements();
+    this.refreshSchedules();
+    this.uS.getUserInfoByEmail(this.Ts.getEmail()!).subscribe(
       data=> {
         this.user=data;
-        this.refreshCategories();
-        this.refreshWallets();
-        this.refreshMovements();
-        this.refreshSchedules();
       },
       error => {
         // Manejar el error aquí
@@ -88,12 +93,19 @@ export class HomePage implements OnInit {
     }
     this.alertError=bool;
   }
-  closeModal() {
+  refreshAll(){
+    this.MovementType=1;
     this.refreshWallets();
     this.refreshCategories();
+    this.refreshSchedules();
     this.validatorMovement.reset();
     this.validatorEditMovement.reset();
+    this.validatorMovement.patchValue({destinationWallet:0});
+    this.validatorMovement.patchValue({date:this.utcDate.toISOString()});
     this.refreshMovements();
+  }
+  closeModal() {
+    this.refreshAll();
     this.modalController.dismiss();
   }
   onIonInfinite(ev: any) {
@@ -112,7 +124,7 @@ export class HomePage implements OnInit {
     this.uS.getCategoriesByUser(this.user!.id!,this.MovementType).subscribe(
       data=> {
         this.categories=data;
-        if(this.categories !=undefined){
+        if(this.categories !=undefined && this.categories.length>0){
           this.validatorMovement.patchValue({category:this.categories[0].id});
         }
         
@@ -194,7 +206,7 @@ export class HomePage implements OnInit {
     //}
     this.mS.newMovement(this.user!.id!,value.wallet,value.category,this.MovementType, movimiento,value.destinationWallet).subscribe(
       data=> {
-        if(value.reps!=0){
+        if(value.reps!=0 && value.reps!=null && value.reps!=undefined){
           let day = new Date((value.date)).getUTCDate();
           let schedule = new newSchedule(day,value.reps,1,true,data.id);
           this.uS.newSchedule(schedule).subscribe(
@@ -229,21 +241,26 @@ export class HomePage implements OnInit {
     if(event.detail.value == "Gasto"){
       this.MovementType=1;
       this.refreshCategories();
+      this.refreshWallets();
       this.validatorMovement.patchValue({destinationWallet:0});
     }
     if(event.detail.value == "Ingreso"){
       this.MovementType=2;
       this.refreshCategories();
+      this.refreshWallets();
       this.validatorMovement.patchValue({destinationWallet:0});
     }
     if(event.detail.value == "Movimiento"){
       this.MovementType=3;
+      this.refreshWallets();
       this.validatorMovement.patchValue({category:0});
       //this.validatorMovement.patchValue({destinationWallet:''});
     }
   }
   editMovement(movement:Movement){
     this.editableMovement=movement;
+    this.MovementType=movement.movementType!;
+    this.refreshCategories();
     this.validatorEditMovement.patchValue({description:movement.description});
     if(movement.movementType==1){
     this.validatorEditMovement.patchValue({amount:(movement.amount)*-1});
@@ -255,6 +272,8 @@ export class HomePage implements OnInit {
     if(movement.movementType!=3){
       this.validatorEditMovement.patchValue({category:movement.category});
     }
+    this.editableMovementType=movement.movementType!;
+    
     this.modalEditCategory?.present();
     
   }

@@ -53,3 +53,35 @@ canvas{
 ion-modal {
     --height: auto;
 }
+
+$table-background: #30383A;
+$table-text-color: #ffffff;
+$table-hover-color: #ddd;
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid $table-background;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: $table-background;
+    color: $table-text-color;
+  }
+
+  td {
+    color: $table-background;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: $table-hover-color;
+  }
+}

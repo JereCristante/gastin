@@ -1,17 +1,16 @@
 ion-input{
     --background: #D9D9D9;
     --color: #4CA49C;
-    margin: 10px;
-    margin-right: 100px;
-    width: 95%;
+    margin-top: 1vh;
+    //margin-right: 100px;
+    //width: 95%;
     --border-color:#4CA49C;
     --border-radius:8px !important;
 }
 ion-card{
     background-color: #30383A !important;
-    border: none;
+    //border: none;
     box-shadow: none;
-
 }
 ion-content{
     --ion-background-color: #30383A !important;
@@ -23,6 +22,7 @@ ion-content{
     --color: white;
     --border-radius:8px !important;
     --box-shadow: 0 0px 0px 0 rgb(0, 0, 0, 0.25);
+    margin-top: 0;
 }
 #forgotLink{
     --color:white;
@@ -31,7 +31,9 @@ ion-content{
 }
 #signUpLink{
     margin-left: 3vw;
-    margin-bottom: 2vh;
+    margin-bottom: 0.5vh;
+    text-transform: none;
+
 }
 #title{
     text-align: center;

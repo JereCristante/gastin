@@ -9,12 +9,12 @@
   </ion-refresher>
   <ion-card style="border-radius: 10px;">
     <ion-card-header id="header" style="padding:0; margin:0;">
-      <ion-grid style="margin:0; font-size: 4vh; color: #EFEBDD;">
+      <ion-grid style="margin:0; font-size: 3.5vh; color: #EFEBDD;">
         <ion-row class="ion-justify-content-between">
-          <ion-col size="6">
+          <ion-col size="4">
             Total:
           </ion-col>
-          <ion-col size="6" style="text-align: end;">
+          <ion-col size="8" style="text-align: end;">
             {{Capital | currency:'ARS'}}
           </ion-col>
         </ion-row>
@@ -28,13 +28,13 @@
   
   <ion-card-content style="padding:0; --background:#D9D9D9 !important;">
     <ion-list style="padding: 0;">
-      <ion-item *ngFor="let movement of wallet.movements" style=" --background:#D9D9D9 !important; font-size: 2.5vh; font-weight: bold; --inner-border-width:0;">
+      <ion-item *ngFor="let movement of wallet.movements" style=" --background:#D9D9D9 !important; font-size: 2vh; font-weight: bold; --inner-border-width:0;">
         <ion-grid>
           <ion-row class="ion-justify-content-between">
             <ion-col size="6" style="color: black">
               {{movement.description | titlecase}}
             </ion-col>
-            <ion-col size="5" style="text-align: end; font-size: 2.5vh; font-weight: bold;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">
+            <ion-col size="5" style="text-align: end; font-size: 2vh; font-weight: bold;" [ngStyle]="{'color':movement.amount>=0 ? '#3FC53C' : '#D11F1F'}">
               {{movement.amount | currency:'ARS'}}
             </ion-col>
           </ion-row>
